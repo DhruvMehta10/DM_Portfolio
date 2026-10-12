@@ -14,7 +14,7 @@
 
 /* Layout: a bridge read left to right — interactive truss hero, research band, pinned horizontal "spans" of projects, timeline, title-block footer. */
 :root{
-  --paper:#E8ECEF; --paper-2:#F4F6F8; --ink:#0D1724; --mute:#55626F; --rule:#C4CCD4;
+  --paper:#E7E3DA; --paper-2:#F1EDE5; --ink:#0D1724; --mute:#57544D; --rule:#CFC8BB;
   --tension:#2453C9; --comp:#F2B300; --on-comp:#0D1724; --cline:#C98200; --fail:#E5484D;
   --band:#0D1724; --band-2:#162233; --band-fg:#E7ECF1; --band-mute:#93A1AE; --band-rule:#26354A;
   --cross:rgba(36,83,201,.28);
@@ -37,8 +37,8 @@
 
 /* sky theme: tokens are registered so the palette can glide between times of day */
 @property --cline{syntax:'<color>';inherits:true;initial-value:#C98200}
-@property --paper{syntax:'<color>';inherits:true;initial-value:#E8ECEF}
-@property --paper-2{syntax:'<color>';inherits:true;initial-value:#F4F6F8}
+@property --paper{syntax:'<color>';inherits:true;initial-value:#E7E3DA}
+@property --paper-2{syntax:'<color>';inherits:true;initial-value:#F1EDE5}
 @property --ink{syntax:'<color>';inherits:true;initial-value:#0D1724}
 @property --mute{syntax:'<color>';inherits:true;initial-value:#55626F}
 @property --rule{syntax:'<color>';inherits:true;initial-value:#C4CCD4}
@@ -959,7 +959,7 @@ body{font-variation-settings:"INFM" 30}
 @keyframes dd-drop{0%,40%{opacity:0;transform:translate(0,0)}50%{opacity:1}100%{opacity:0;transform:translate(-110px,96px)}}
 .dd-glue{transform-box:fill-box;transform-origin:50% 100%;animation:dd-squeeze 2.4s ease-in-out infinite}
 @keyframes dd-squeeze{0%,30%,60%,100%{transform:none}40%{transform:scaleX(.94) scaleY(1.03)}}
-.dd-board{fill:#B9895A;stroke:var(--ink);stroke-width:3}.dd-paper{fill:#FFFFFF;stroke:var(--ink);stroke-width:2}.dd-clip{fill:#9AA3AD;stroke:var(--ink);stroke-width:3}
+.dd-board{fill:#B9895A;stroke:var(--ink);stroke-width:3}.dd-paper{fill:#F6F2EA;stroke:var(--ink);stroke-width:2}.dd-clip{fill:#9AA3AD;stroke:var(--ink);stroke-width:3}
 .dd-check{fill:none;stroke:var(--tension);stroke-width:5;stroke-dasharray:40;stroke-dashoffset:40;animation:dd-tick 4.5s ease-out infinite}
 .dd-check.k2{animation-delay:.6s}.dd-check.k3{animation-delay:1.2s}
 @keyframes dd-tick{0%{stroke-dashoffset:40}15%,85%{stroke-dashoffset:0}100%{stroke-dashoffset:0;opacity:0}}
@@ -1178,9 +1178,9 @@ const TOK=['paper','paper-2','ink','mute','rule','tension','comp','band','band-2
 const P={
  night:  ['#0A111B','#111A26','#E5EAF0','#8E9BA9','#243243','#7C9CFF','#FFC21A','#04080D','#0E1724','#E7ECF1','#8592A1','#1F2C3D'],
  predawn:['#171C31','#1E2441','#E9E7F2','#9D9EB9','#2F3656','#91A7FF','#FFB64A','#0B0F21','#151A32','#ECEAF4','#9294B0','#272D49'],
- dawn:   ['#ECE4EA','#F6F1F4','#1B1726','#5F576B','#D4C9D3','#3550C4','#EEA21F','#1D1830','#2A2340','#F2ECF4','#A69CB6','#3A3150'],
- day:    ['#E8ECEF','#F4F6F8','#0D1724','#55626F','#C4CCD4','#2453C9','#F2B300','#0D1724','#162233','#E7ECF1','#93A1AE','#26354A'],
- golden: ['#F0E4D1','#F8EFE3','#1C150E','#685A49','#D9C9B1','#2B4CB4','#E59B00','#1E160E','#2B2117','#F4ECE1','#A8988A','#3B2F23'],
+ dawn:   ['#E8E0E5','#F1EBEE','#1B1726','#5F576B','#D4C9D3','#3550C4','#EEA21F','#1D1830','#2A2340','#F2ECF4','#A69CB6','#3A3150'],
+ day:    ['#E7E3DA','#F1EDE5','#0D1724','#57544D','#CFC8BB','#2453C9','#F2B300','#0D1724','#162233','#E7ECF1','#93A1AE','#26354A'],
+ golden: ['#ECE0CD','#F3EADC','#1C150E','#685A49','#D9C9B1','#2B4CB4','#E59B00','#1E160E','#2B2117','#F4ECE1','#A8988A','#3B2F23'],
  dusk:   ['#2A2341','#342C4D','#EFE9F7','#ABA3C4','#463C64','#A3B5FF','#FFB13B','#15111F','#201A31','#EFE9F7','#9F97B7','#352D4C']
 };
 const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
@@ -2607,9 +2607,10 @@ document.querySelectorAll('#truss .draw').forEach(e=>e.addEventListener('animati
   document.querySelectorAll('main > section, footer.foot').forEach(s=>io.observe(s))})();
 /* ---------- photos: no right-click / long-press save, no dragging out ---------- */
 (()=>{const isPhoto=t=>t&&t.closest&&t.closest('img,picture,.pol,.lb,.collage,.site,.pile,figure,[data-lbg]');
-  document.addEventListener('contextmenu',e=>{if(isPhoto(e.target))e.preventDefault()},{capture:true});
+  document.addEventListener('contextmenu',e=>e.preventDefault(),{capture:true});
   document.addEventListener('dragstart',e=>{if(e.target&&e.target.tagName==='IMG')e.preventDefault()},{capture:true});
-  document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&(e.key==='s'||e.key==='S'))e.preventDefault()});
+  document.addEventListener('keydown',e=>{const k=(e.key||'').toLowerCase(),m=e.ctrlKey||e.metaKey;
+    if(k==='f12'||(m&&(k==='s'||k==='u'))||(m&&(e.shiftKey||e.altKey)&&(k==='i'||k==='j'||k==='c'))){e.preventDefault();e.stopPropagation()}},{capture:true});
   const lock=()=>document.querySelectorAll('img').forEach(i=>{if(!i.__l){i.__l=1;i.draggable=false;i.decoding='async'}});lock();
   let q=0;new MutationObserver(ms=>{if(q)return;for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1&&(n.tagName==='IMG'||n.querySelector&&n.querySelector('img'))){q=1;requestAnimationFrame(()=>{q=0;lock()});return}}).observe(document.body,{childList:true,subtree:true})})();
 </script>
