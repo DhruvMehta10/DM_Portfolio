@@ -1622,7 +1622,7 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="xh xh-v" id="xv"></div><div class="xh xh-h" id="xhh"></div><div class="xh xh-l" id="xl">X 0000 · Y 0000</div>
 <div class="ld" id="ld" aria-hidden="true"><div class="ld-in">
   <span class="ld-l mono">Load test in progress</span>
-  <div class="ld-n" data-noi18n><b id="ldN">0.00</b><i>kN</i></div>
+  <div class="ld-n" data-noi18n><b id="ldN">0</b><i>%</i></div>
   <svg class="ld-beam" viewBox="0 0 400 70"><path class="ld-sup" d="M14 52 l16 0 l-8 -12 Z M370 52 l16 0 l-8 -12 Z"/><path class="ld-b" id="ldB" d="M22 40 Q200 40 378 40"/><path class="ld-arrow" id="ldA" d="M200 4 V30 M193 22 L200 31 L207 22"/></svg>
   <div class="ld-bar"><i id="ldBar"></i></div>
 </div></div>
@@ -3214,8 +3214,8 @@ beav:`<svg class="dd-beav" viewBox="0 0 92 62" aria-hidden="true"><g class="bv-u
 /* ---------- loader: a quick load test before the site appears (first visit in a session) ---------- */
 (()=>{const ld=document.getElementById('ld');if(!ld)return;try{sessionStorage.setItem('dm-ld','1')}catch(_){}
   const N=document.getElementById('ldN'),B=document.getElementById('ldB'),A=document.getElementById('ldA'),bar=document.getElementById('ldBar'),T=1250;let t0=0;
-  function f(now){if(!t0)t0=now;const u=Math.min(1,(now-t0)/T),e=1-Math.pow(1-u,3),v=(5.22*e).toFixed(2);
-    N.textContent=window.__lang==='fr'?v.replace('.',','):v;const d=15*e;B.setAttribute('d',`M22 40 Q200 ${(40+d*2).toFixed(1)} 378 40`);A.setAttribute('transform',`translate(0 ${d.toFixed(1)})`);bar.style.transform=`scaleX(${e.toFixed(3)})`;
+  function f(now){if(!t0)t0=now;const u=Math.min(1,(now-t0)/T),e=1-Math.pow(1-u,3),v=String(Math.round(100*e));
+    N.textContent=v;const d=15*e;B.setAttribute('d',`M22 40 Q200 ${(40+d*2).toFixed(1)} 378 40`);A.setAttribute('transform',`translate(0 ${d.toFixed(1)})`);bar.style.transform=`scaleX(${e.toFixed(3)})`;
     if(u<1){requestAnimationFrame(f);return}
     setTimeout(()=>{ld.classList.add('out');document.documentElement.classList.remove('ld-on');setTimeout(()=>ld.remove(),800)},280)}
   requestAnimationFrame(f)})();
