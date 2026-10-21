@@ -1711,6 +1711,13 @@ body.sc-on .buddy-wrap{opacity:0!important;visibility:hidden;transition:opacity 
 .sc-front{z-index:3}
 .sc-front .spi{filter:drop-shadow(0 26px 22px rgba(70,40,20,.24))}
 @media (max-width:760px){.sc-back{display:none}}
+
+/* props can be grabbed and thrown */
+.sc-fg{pointer-events:none}
+.sc-fg a,.sc-fg button,.sc-fg [tabindex]{pointer-events:auto}
+.sc-props .sp{pointer-events:auto;cursor:grab;touch-action:none;-webkit-tap-highlight-color:transparent}
+.sc-props .sp.grab{cursor:grabbing;z-index:5}
+.sc-props .sp.grab .spi{filter:drop-shadow(0 34px 30px rgba(70,40,20,.32))}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -4276,7 +4283,7 @@ ORDER.forEach(n=>{img[n]=load('img/face_'+n+'.webp');spr[n]=[0,1].map(k=>load('i
 const BOX=[0,1].map(k=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ORDER.forEach(n=>{const e=EY[n][k];e.poly.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});y0=Math.min(y0,e.c[1]-e.R);y1=Math.max(y1,e.c[1]+e.R)});
   return [Math.floor(x0-6),Math.floor(y0-6),Math.ceil(x1-x0+12),Math.ceil(y1-y0+12)]});
 const red=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');
-let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null,orbitEl=null,mtx=0,mty=0,wink=0,winkT=-1e9,winkArmed=true;
+let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null,orbitEl=null,lastPhys=0,mtx=0,mty=0,wink=0,winkT=-1e9,winkArmed=true;
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 function path(pts,close){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));if(close)ctx.closePath()}
 function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];let lash=null;ctx.save();ctx.globalAlpha=alpha;path(e.poly,1);ctx.clip();
@@ -4326,7 +4333,8 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   {const ob=orbitEl||(orbitEl=document.getElementById('scOrbit'));if(ob){const cr=cv.getBoundingClientRect(),sr=cv.offsetParent.getBoundingClientRect(),ox=cr.left-sr.left+cr.width*.475,oy=cr.top-sr.top+cr.height*.36,dia=cr.width*(1.02+p*.25)/100;
     ob.style.transform=`translate3d(${(ox-mtx*40).toFixed(1)}px,${(oy-mty*26).toFixed(1)}px,0) rotate(${(p*150+now/1000*4).toFixed(2)}deg) scale(${dia.toFixed(3)})`;
     const parts=ob.children;if(parts[1])parts[1].style.transform=`rotate(${(-now/1000*10).toFixed(1)}deg)`;if(parts[2])parts[2].style.transform=`rotate(${(-p*260-now/1000*9).toFixed(1)}deg) scale(${(1+p*.35).toFixed(3)})`}}
-  if(!props)props=[...sec.querySelectorAll('.sp')].map((el,j)=>({el,d:+el.dataset.dp||1,x:0,y:0,ph:j*1.93+.4,sp:.8+((j*37)%9)/18,hop:0}));
+  if(!props)props=[...sec.querySelectorAll('.sp')].map((el,j)=>({el,d:+el.dataset.dp||1,x:0,y:0,ph:j*1.93+.4,sp:.8+((j*37)%9)/18,hop:0,ox:0,oy:0,vx:0,vy:0,ang:0,va:0,drag:null}));
+  const dtP=Math.min(.05,Math.max(.001,(now-(lastPhys||now))/1000));lastPhys=now;physics(dtP,vw,vh);
   const T=now/1000,amb=vw<=760?.6:1,grin=sec.dataset.mood==='grin';
   {const mx=px===null?0:(px/vw-.5),my=py===null?0:(py/vh-.5);for(const q of props){const txp=-mx*q.d*34,typ=-my*q.d*22-(vw>760?p*(30+q.d*8):0);q.x+=(txp-q.x)*.12;q.y+=(typ-q.y)*.12;
     if(Math.abs(txp-q.x)>.2||Math.abs(typ-q.y)>.2)busy=true;if(q.cx===undefined){const rr=q.el.getBoundingClientRect(),sr2=sec.getBoundingClientRect();q.cx=(rr.left+rr.width/2)/vw-.5;q.cy=(rr.top-Math.max(0,sr2.top)+rr.height/2)/vh-.5;q.spin=(q.d>1.2?1:-1)*(40+q.d*45)*(q.cx<0?-1:1)}
@@ -4335,13 +4343,37 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
       dx=(Math.sin(T*.31*w+a)*R+Math.sin(T*.73*w+a*2.1)*R*.35),dy=(Math.cos(T*.27*w+a*1.3)*R*.8+Math.sin(T*.91*w+a)*R*.25),
       wob=Math.sin(T*.45*w+a)*9+Math.sin(T*1.1*w+a*.7)*3,ty3=Math.sin(T*.38*w+a*1.7)*26,tx3=Math.cos(T*.33*w+a)*14,br=1+Math.sin(T*.6*w+a)*.035;
     q.hop+=((grin?1:0)-q.hop)*.08;const hop=-Math.abs(Math.sin(T*5.2+a))*22*q.hop*amb;
-    q.el.style.transform=`translate3d(${(q.x+ox2+dx).toFixed(1)}px,${(q.y+oy2+dy+hop).toFixed(1)}px,0) perspective(700px) rotateY(${ty3.toFixed(1)}deg) rotateX(${tx3.toFixed(1)}deg) rotate(${(p*q.spin+wob).toFixed(1)}deg) scale(${((1+p*(vw<=760?.12:.2+q.d*.2))*br).toFixed(3)})`}busy=true}
+    const held=q.drag?.35:1;q.el.style.transform=`translate3d(${(q.x+ox2+dx*held+q.ox).toFixed(1)}px,${(q.y+oy2+(dy+hop)*held+q.oy).toFixed(1)}px,0) perspective(700px) rotateY(${(ty3*held).toFixed(1)}deg) rotateX(${(tx3*held).toFixed(1)}deg) rotate(${(p*q.spin+wob*held+q.ang).toFixed(1)}deg) scale(${((1+p*(vw<=760?.12:.2+q.d*.2))*br).toFixed(3)})`}busy=true}
   const [i,f]=exprAt(p),mood=ORDER[f>.5?i+1:i];if(sec.dataset.mood!==mood)sec.dataset.mood=mood;sec.classList.toggle('sc-top',p<.08);
   document.body.classList.toggle('sc-on',r.bottom>vh*.35&&r.top<vh*.5);
   const eKey=i+':'+f.toFixed(3),gKey=gx.toFixed(2)+','+gy.toFixed(2)+','+blink.toFixed(2)+','+wink.toFixed(2);
   if(dirty||eKey!==lastE){paint(i,f,true);dirty=false;lastE=eKey;lastG=gKey;if(img[ORDER[i]].naturalWidth&&!sec.classList.contains('sc-ready'))setTimeout(()=>sec.classList.add('sc-ready'),250)}
   else if(gKey!==lastG){paint(i,f,false);lastG=gKey}
   const vis=r.bottom>0&&r.top<vh;if(vis&&(busy||blinkT-now<400))go();else if(vis)setTimeout(go,Math.max(16,blinkT-now-300))}
+
+/* ---- throwable props: drag, throw, bounce off each other and the screen edges, then drift home ---- */
+function physics(dt,vw,vh){if(!props)return;const st=cv.parentElement.getBoundingClientRect(),top=Math.max(st.top,0)+4,bot=Math.min(st.bottom,vh)-4;
+  const B=props.map(q=>{const b=q.el.getBoundingClientRect();return {q,x:b.left+b.width/2,y:b.top+b.height/2,r:Math.min(b.width,b.height)*.42,vis:b.width>0&&getComputedStyle(q.el).display!=='none'}}).filter(o=>o.vis);
+  for(const o of B){const q=o.q;
+    if(q.drag){const nx=q.drag.tx,ny=q.drag.ty,ddx=nx-q.ox,ddy=ny-q.oy;q.vx=q.vx*.6+(ddx/dt)*.4;q.vy=q.vy*.6+(ddy/dt)*.4;q.ox=nx;q.oy=ny;q.va*=.8;continue}
+    const home=Math.hypot(q.ox,q.oy),k=home>1?1.1:0;q.vx+=-q.ox*k*dt;q.vy+=-q.oy*k*dt;const damp=Math.pow(.55,dt);q.vx*=damp;q.vy*=damp;q.va*=Math.pow(.5,dt);
+    q.ox+=q.vx*dt;q.oy+=q.vy*dt;q.ang+=q.va*dt;q.ang*=Math.pow(.7,dt);o.x+=q.vx*dt;o.y+=q.vy*dt;
+    /* screen edges */
+    const e=.82;if(o.x-o.r<0&&q.vx<0){q.vx=-q.vx*e;q.ox+=-(o.x-o.r);q.va+=q.vy*.3;bump(q)}if(o.x+o.r>vw&&q.vx>0){q.vx=-q.vx*e;q.ox-=(o.x+o.r-vw);q.va-=q.vy*.3;bump(q)}
+    if(o.y-o.r<top&&q.vy<0){q.vy=-q.vy*e;q.oy+=top-(o.y-o.r);q.va-=q.vx*.3;bump(q)}if(o.y+o.r>bot&&q.vy>0){q.vy=-q.vy*e;q.oy-=(o.y+o.r-bot);q.va+=q.vx*.3;bump(q)}}
+  /* prop vs prop */
+  for(let i=0;i<B.length;i++)for(let j=i+1;j<B.length;j++){const a=B[i],b=B[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,min=a.r+b.r;if(d>=min)continue;
+    const nx=dx/d,ny=dy/d,qa=a.q,qb=b.q,rel=(qb.vx-qa.vx)*nx+(qb.vy-qa.vy)*ny,ov=(min-d);
+    const ma=qa.drag?1e6:1,mb=qb.drag?1e6:1,sa=mb/(ma+mb),sb=ma/(ma+mb);
+    qa.ox-=nx*ov*sa;qa.oy-=ny*ov*sa;qb.ox+=nx*ov*sb;qb.oy+=ny*ov*sb;
+    if(rel<0){const jimp=-(1.85)*rel/(1/ma+1/mb);if(!qa.drag){qa.vx-=jimp*nx/ma;qa.vy-=jimp*ny/ma;qa.va+=(rel*(-ny))*.25}if(!qb.drag){qb.vx+=jimp*nx/mb;qb.vy+=jimp*ny/mb;qb.va-=(rel*(-ny))*.25}bump(qa);bump(qb)}}
+  for(const q of props){const sp=Math.hypot(q.vx,q.vy);if(sp>2600){q.vx*=2600/sp;q.vy*=2600/sp}q.va=Math.max(-720,Math.min(720,q.va))}}
+function bump(q){const i=q.el.querySelector('.spi');if(!i||i.__b)return;i.__b=1;i.animate([{scale:'1'},{scale:'1.12 .9'},{scale:'.95 1.06'},{scale:'1'}],{duration:280,easing:'ease-out'}).onfinish=()=>{i.__b=0}}
+sec.addEventListener('pointerdown',e=>{const el=e.target.closest&&e.target.closest('.sp');if(!el||!props)return;const q=props.find(o=>o.el===el);if(!q)return;
+  e.preventDefault();el.setPointerCapture(e.pointerId);q.drag={sx:e.clientX,sy:e.clientY,ox:q.ox,oy:q.oy,tx:q.ox,ty:q.oy,id:e.pointerId};el.classList.add('grab');q.vx=q.vy=0;go()});
+sec.addEventListener('pointermove',e=>{if(!props)return;for(const q of props)if(q.drag&&q.drag.id===e.pointerId){q.drag.tx=q.drag.ox+e.clientX-q.drag.sx;q.drag.ty=q.drag.oy+e.clientY-q.drag.sy;go()}});
+const drop=e=>{if(!props)return;for(const q of props)if(q.drag&&q.drag.id===e.pointerId){q.drag=null;q.el.classList.remove('grab');q.va=(Math.random()-.5)*Math.min(600,Math.hypot(q.vx,q.vy)*.4);go()}};
+sec.addEventListener('pointerup',drop);sec.addEventListener('pointercancel',drop);
 function go(){if(!raf)raf=requestAnimationFrame(frame)}
 
 /* match the stage colour to the picture's own backdrop so there is no visible edge */
