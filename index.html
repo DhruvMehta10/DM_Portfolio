@@ -1679,6 +1679,23 @@ body.sc-on .buddy-wrap{opacity:0!important;visibility:hidden;transition:opacity 
 @media (min-width:761px) and (max-height:820px){.sp-tape{top:57%!important}.sp-blueprint{top:38%!important}.sp-hardhat{top:15%!important}}
 
 @media (min-width:761px) and (max-height:560px){.sp-tape{display:none}.sp-hardhat{top:30%!important}.sp-bridge{top:26%!important}.sp-cone{top:58%!important}}
+
+/* rings behind the head: they grow and turn as you scroll */
+.sc-orbit{position:absolute;left:0;top:0;width:100px;height:100px;margin:-50px 0 0 -50px;z-index:0;pointer-events:none;will-change:transform;opacity:0;transition:opacity .8s .3s}
+.scene.sc-ready .sc-orbit{opacity:1}
+.sc-me{z-index:1}
+.ob{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ob-c{fill:none;stroke:var(--ink);stroke-opacity:.16;stroke-width:2;stroke-dasharray:3 9}
+.ob-t path{stroke:var(--tension);stroke-opacity:.45;stroke-width:3;stroke-linecap:round}
+.ob-c2{fill:none;stroke:var(--tension);stroke-opacity:.18;stroke-width:1.5}
+.ob-d{fill:none;stroke:var(--ink);stroke-opacity:.12;stroke-width:2}
+.ob-n circle{fill:var(--comp);stroke:var(--ink);stroke-width:2.5}
+.ob-e{fill:rgba(255,255,255,.28);stroke:var(--comp);stroke-opacity:.7;stroke-width:3;stroke-dasharray:22 14}
+.ob-x{stroke:var(--ink);stroke-opacity:.25;stroke-width:3;stroke-linecap:round}
+.scene .ob-a{animation:ob-spin 90s linear infinite}
+.scene .ob-b{animation:ob-spin 60s linear infinite reverse}
+@keyframes ob-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.scene .ob{animation:none}}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -1786,7 +1803,12 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="pages" id="pages">
 <div class="page cur" data-page="home" id="pg-home">
 <section class="hero scene" id="intro">
-  <div class="sc-stage" aria-hidden="true"><canvas class="sc-me" id="scMe" width="1136" height="1408"></canvas>
+  <div class="sc-stage" aria-hidden="true"><div class="sc-orbit" id="scOrbit" aria-hidden="true">
+      <svg class="ob ob-a" viewBox="0 0 1000 1000"><circle class="ob-c" cx="500" cy="500" r="490"/><g class="ob-t"><path d="M970.0 500.0 L930.0 500.0"/><path d="M967.4 549.1 L949.5 547.2"/><path d="M959.7 597.7 L942.1 594.0"/><path d="M947.0 645.2 L929.9 639.7"/><path d="M929.4 691.2 L912.9 683.8"/><path d="M907.0 735.0 L872.4 715.0"/><path d="M880.2 776.3 L865.7 765.7"/><path d="M849.3 814.5 L835.9 802.4"/><path d="M814.5 849.3 L802.4 835.9"/><path d="M776.3 880.2 L765.7 865.7"/><path d="M735.0 907.0 L715.0 872.4"/><path d="M691.2 929.4 L683.8 912.9"/><path d="M645.2 947.0 L639.7 929.9"/><path d="M597.7 959.7 L594.0 942.1"/><path d="M549.1 967.4 L547.2 949.5"/><path d="M500.0 970.0 L500.0 930.0"/><path d="M450.9 967.4 L452.8 949.5"/><path d="M402.3 959.7 L406.0 942.1"/><path d="M354.8 947.0 L360.3 929.9"/><path d="M308.8 929.4 L316.2 912.9"/><path d="M265.0 907.0 L285.0 872.4"/><path d="M223.7 880.2 L234.3 865.7"/><path d="M185.5 849.3 L197.6 835.9"/><path d="M150.7 814.5 L164.1 802.4"/><path d="M119.8 776.3 L134.3 765.7"/><path d="M93.0 735.0 L127.6 715.0"/><path d="M70.6 691.2 L87.1 683.8"/><path d="M53.0 645.2 L70.1 639.7"/><path d="M40.3 597.7 L57.9 594.0"/><path d="M32.6 549.1 L50.5 547.2"/><path d="M30.0 500.0 L70.0 500.0"/><path d="M32.6 450.9 L50.5 452.8"/><path d="M40.3 402.3 L57.9 406.0"/><path d="M53.0 354.8 L70.1 360.3"/><path d="M70.6 308.8 L87.1 316.2"/><path d="M93.0 265.0 L127.6 285.0"/><path d="M119.8 223.7 L134.3 234.3"/><path d="M150.7 185.5 L164.1 197.6"/><path d="M185.5 150.7 L197.6 164.1"/><path d="M223.7 119.8 L234.3 134.3"/><path d="M265.0 93.0 L285.0 127.6"/><path d="M308.8 70.6 L316.2 87.1"/><path d="M354.8 53.0 L360.3 70.1"/><path d="M402.3 40.3 L406.0 57.9"/><path d="M450.9 32.6 L452.8 50.5"/><path d="M500.0 30.0 L500.0 70.0"/><path d="M549.1 32.6 L547.2 50.5"/><path d="M597.7 40.3 L594.0 57.9"/><path d="M645.2 53.0 L639.7 70.1"/><path d="M691.2 70.6 L683.8 87.1"/><path d="M735.0 93.0 L715.0 127.6"/><path d="M776.3 119.8 L765.7 134.3"/><path d="M814.5 150.7 L802.4 164.1"/><path d="M849.3 185.5 L835.9 197.6"/><path d="M880.2 223.7 L865.7 234.3"/><path d="M907.0 265.0 L872.4 285.0"/><path d="M929.4 308.8 L912.9 316.2"/><path d="M947.0 354.8 L929.9 360.3"/><path d="M959.7 402.3 L942.1 406.0"/><path d="M967.4 450.9 L949.5 452.8"/></g><circle class="ob-c2" cx="500" cy="500" r="410"/></svg>
+      <svg class="ob ob-b" viewBox="0 0 1000 1000"><circle class="ob-d" cx="500" cy="500" r="380"/><g class="ob-n"><circle cx="867.2" cy="597.7" r="9"/><circle cx="769.2" cy="768.2" r="5"/><circle cx="599.0" cy="866.9" r="5"/><circle cx="402.3" cy="867.2" r="9"/><circle cx="231.8" cy="769.2" r="5"/><circle cx="133.1" cy="599.0" r="5"/><circle cx="132.8" cy="402.3" r="9"/><circle cx="230.8" cy="231.8" r="5"/><circle cx="401.0" cy="133.1" r="5"/><circle cx="597.7" cy="132.8" r="9"/><circle cx="768.2" cy="230.8" r="5"/><circle cx="866.9" cy="401.0" r="5"/></g></svg>
+      <svg class="ob ob-c" viewBox="0 0 1000 1000"><circle class="ob-e" cx="500" cy="500" r="300"/><path class="ob-x" d="M500 170 V250 M500 750 V830 M170 500 H250 M750 500 H830"/></svg>
+    </div>
+    <canvas class="sc-me" id="scMe" width="1136" height="1408"></canvas>
     <div class="sc-props" aria-hidden="true"><span class="sp sp-hardhat sp-l sp-ph" style="--x:7%;--y:19%;--w:13vw;--mw:230px;--rot:-12deg;--dp:1.3;--i:0;--px:5%;--py:15%;--pw:25vw" data-dp="1.3"><img class="spi" src="img/prop_hardhat.webp" alt="" decoding="async"></span><span class="sp sp-blueprint sp-l" style="--x:2.5%;--y:45%;--w:15vw;--mw:260px;--rot:9deg;--dp:0.8;--i:1" data-dp="0.8"><img class="spi" src="img/prop_blueprint.webp" alt="" decoding="async"></span><span class="sp sp-tape sp-l sp-ph" style="--x:12%;--y:65%;--w:10.5vw;--mw:190px;--rot:-7deg;--dp:1.6;--i:2;--px:3%;--py:74%;--pw:22vw" data-dp="1.6"><img class="spi" src="img/prop_tape.webp" alt="" decoding="async"></span><span class="sp sp-bridge sp-r sp-ph" style="--x:4%;--y:17%;--w:17vw;--mw:300px;--rot:5deg;--dp:1.0;--i:3;--px:4%;--py:14%;--pw:32vw" data-dp="1.0"><img class="spi" src="img/prop_bridge.webp" alt="" decoding="async"></span><span class="sp sp-mug sp-r" style="--x:14%;--y:45%;--w:8.5vw;--mw:150px;--rot:-9deg;--dp:1.8;--i:4" data-dp="1.8"><img class="spi" src="img/prop_mug.webp" alt="" decoding="async"></span><span class="sp sp-cone sp-r sp-ph" style="--x:5%;--y:63%;--w:10vw;--mw:180px;--rot:11deg;--dp:1.2;--i:5;--px:4%;--py:72%;--pw:20vw" data-dp="1.2"><img class="spi" src="img/prop_cone.webp" alt="" decoding="async"></span></div></div>
   <div class="sc-fg">
     <div class="sc-open wrap">
@@ -4236,7 +4258,7 @@ ORDER.forEach(n=>{img[n]=load('img/face_'+n+'.webp');spr[n]=[0,1].map(k=>load('i
 const BOX=[0,1].map(k=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ORDER.forEach(n=>{const e=EY[n][k];e.poly.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});y0=Math.min(y0,e.c[1]-e.R);y1=Math.max(y1,e.c[1]+e.R)});
   return [Math.floor(x0-6),Math.floor(y0-6),Math.ceil(x1-x0+12),Math.ceil(y1-y0+12)]});
 const red=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');
-let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null;
+let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null,orbitEl=null;
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 function path(pts,close){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));if(close)ctx.closePath()}
 function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];ctx.save();ctx.globalAlpha=alpha;path(e.poly,1);ctx.clip();
@@ -4247,11 +4269,10 @@ function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];ctx.save
     ctx.restore()})}
 function paint(i,f,full){const A=ORDER[i],B=f>0?ORDER[i+1]:null;if(!img[A].naturalWidth)return;
   const regions=full?[[0,0,1136,1408]]:BOX;
-  for(const [x,y,w,h] of regions){ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
+  for(const [x,y,w,h] of regions){ctx.clearRect(x,y,w,h);ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
     ctx.globalAlpha=1;ctx.drawImage(img[A],0,0);eyes(A,1);
     if(B&&img[B].naturalWidth){ctx.globalAlpha=f;ctx.drawImage(img[B],0,0);eyes(B,f)}ctx.restore()}
-  if(full&&edge){ctx.globalAlpha=1;const fade=(x0,y0,x1,y1,rgb,rx,ry,rw,rh)=>{const g=ctx.createLinearGradient(x0,y0,x1,y1);[[0,1],[.35,.82],[.65,.38],[1,0]].forEach(([o,a])=>g.addColorStop(o,`rgba(${rgb},${a})`));ctx.fillStyle=g;ctx.fillRect(rx,ry,rw,rh)};
-    fade(0,0,210,0,edge.l,0,0,210,1408);fade(1136,0,926,0,edge.r,926,0,210,1408);fade(0,0,0,95,edge.t,0,0,1136,95)}}
+}
 function exprAt(p){if(p<.3)return[0,0];if(p<.38)return[0,ease((p-.3)/.08)];if(p<.64)return[1,0];if(p<.72)return[1,ease((p-.64)/.08)];return[2,0]}
 function frame(now){raf=0;if(!sec.offsetParent)return;
   const r=sec.getBoundingClientRect(),vh=innerHeight,vw=innerWidth,span=Math.max(1,r.height-vh);
@@ -4270,9 +4291,14 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   if(Math.abs(tx-gx)>.03||Math.abs(ty-gy)>.03)busy=true;else{gx=tx;gy=ty}
   if(!red.matches){const bt=now-blinkT;if(bt>0){blink=bt<90?bt/90:bt<180?1-(bt-90)/90:0;busy=true;if(bt>=180){blink=0;blinkT=now+2600+Math.random()*3400}}}
   if(!red.matches){const op=cl(1-pT*7,0,1);if(openEl&&openEl.style.opacity!==String(op))openEl.style.opacity=op}
+  {const ob=orbitEl||(orbitEl=document.getElementById('scOrbit'));if(ob){const cr=cv.getBoundingClientRect(),sr=cv.offsetParent.getBoundingClientRect(),ox=cr.left-sr.left+cr.width*.475,oy=cr.top-sr.top+cr.height*.36,dia=cr.width*(1.02+p*.25)/100;
+    ob.style.transform=`translate3d(${ox.toFixed(1)}px,${oy.toFixed(1)}px,0) rotate(${(p*150).toFixed(2)}deg) scale(${dia.toFixed(3)})`;
+    const parts=ob.children;if(parts[2])parts[2].style.transform=`rotate(${(-p*260).toFixed(1)}deg) scale(${(1+p*.35).toFixed(3)})`}}
   if(!props)props=[...sec.querySelectorAll('.sp')].map(el=>({el,d:+el.dataset.dp||1,x:0,y:0}));
   {const mx=px===null?0:(px/vw-.5),my=py===null?0:(py/vh-.5);for(const q of props){const txp=-mx*q.d*34,typ=-my*q.d*22-(vw>760?p*(30+q.d*8):0);q.x+=(txp-q.x)*.12;q.y+=(typ-q.y)*.12;
-    if(Math.abs(txp-q.x)>.2||Math.abs(typ-q.y)>.2)busy=true;q.el.style.transform=`translate3d(${q.x.toFixed(1)}px,${q.y.toFixed(1)}px,0) scale(${(1+p*.07).toFixed(3)})`}}
+    if(Math.abs(txp-q.x)>.2||Math.abs(typ-q.y)>.2)busy=true;if(q.cx===undefined){const rr=q.el.getBoundingClientRect(),sr2=sec.getBoundingClientRect();q.cx=(rr.left+rr.width/2)/vw-.5;q.cy=(rr.top-Math.max(0,sr2.top)+rr.height/2)/vh-.5;q.spin=(q.d>1.2?1:-1)*(40+q.d*45)*(q.cx<0?-1:1)}
+    const out=vw<=760?0:p*p*(60+q.d*90),len=Math.hypot(q.cx,q.cy)||1,ox2=q.cx/len*out,oy2=q.cy/len*out;
+    q.el.style.transform=`translate3d(${(q.x+ox2).toFixed(1)}px,${(q.y+oy2).toFixed(1)}px,0) rotate(${(p*q.spin).toFixed(1)}deg) scale(${(1+p*(vw<=760?.12:.2+q.d*.2)).toFixed(3)})`}}
   const [i,f]=exprAt(p),mood=ORDER[f>.5?i+1:i];if(sec.dataset.mood!==mood)sec.dataset.mood=mood;sec.classList.toggle('sc-top',p<.08);
   document.body.classList.toggle('sc-on',r.bottom>vh*.35&&r.top<vh*.5);
   const eKey=i+':'+f.toFixed(3),gKey=gx.toFixed(2)+','+gy.toFixed(2)+','+blink.toFixed(2);
@@ -4285,7 +4311,7 @@ img.smile.addEventListener('load',()=>{try{const c=document.createElement('canva
   x.drawImage(img.smile,0,0,8,1000,0,0,1,64);x.drawImage(img.smile,1128,0,8,1000,1,0,1,64);x.drawImage(img.smile,0,0,1136,8,2,0,1,64);
   const d=x.getImageData(0,0,3,64).data,avg=col=>{let R=0,G=0,B=0;for(let y=0;y<64;y++){const k=(y*3+col)*4;R+=d[k];G+=d[k+1];B+=d[k+2]}return `${Math.round(R/64)},${Math.round(G/64)},${Math.round(B/64)}`};
   edge={l:avg(0),r:avg(1),t:avg(2)};sec.style.setProperty('--stage',`rgb(${edge.t})`);{const m=[edge.l,edge.r,edge.t].map(v=>v.split(',').map(Number)),avg=[0,1,2].map(i=>Math.round((m[0][i]+m[1][i]+m[2][i])/3)).join(',');edge.l=edge.r=edge.t=avg;sec.style.setProperty('--stage',`rgb(${avg})`);sec.style.setProperty('--stage-bg',`rgb(${avg})`)}dirty=true;go()}catch(_){}});
-addEventListener('scroll',go,{passive:true});addEventListener('resize',()=>{dirty=true;go()});addEventListener('hashchange',()=>setTimeout(go,80));
+addEventListener('scroll',go,{passive:true});addEventListener('resize',()=>{dirty=true;if(props)props.forEach(q=>{q.cx=undefined});go()});addEventListener('hashchange',()=>setTimeout(go,80));
 addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
 addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
 document.addEventListener('visibilitychange',go);go()})();
