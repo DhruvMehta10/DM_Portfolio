@@ -4281,8 +4281,12 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   if(red.matches){cv.style.transform=''}else{
     const e=ease(Math.min(1,p/.85)),w=cv.offsetWidth,h=cv.offsetHeight,fx=cv.offsetLeft+w*.475,fy=cv.offsetTop+h*.40;
     const ph=vw<=760,maxS=Math.max(1,ph?Math.min(2,vw*.98/(w*.48)):Math.min(2.4,vw*.44/(w*.48),vh*.9/(h*.6))),tx=(vw*.5-fx)*e,ty=(vh*(ph?.64:.46)-fy)*e,sc=1+(maxS-1)*e;
-    const tyc=Math.max(ty,vh-(cv.offsetTop+h*.4+h*.6*sc));
-    cv.style.transform=`translate3d(${tx.toFixed(2)}px,${tyc.toFixed(2)}px,0) scale(${sc.toFixed(4)})`}
+    /* the portrait itself turns with the scroll: a little head-turn while smiling, cocks his head when curious, leans back into the grin */
+    const sm=t=>t*t*(3-2*t),seg=(a,b)=>sm(cl((p-a)/(b-a),0,1));
+    const rz=-7*seg(.12,.4)+11*seg(.56,.82),ry=14*seg(0,.26)-24*seg(.3,.56)+10*seg(.64,.9),rx=-4*seg(.6,.9);
+    const ov=Math.abs(Math.sin(rz*Math.PI/180))*w*sc*.55+Math.abs(Math.sin(ry*Math.PI/180))*h*.08+12;
+    const tyc=Math.max(ty,vh+ov-(cv.offsetTop+h*.4+h*.6*sc));
+    cv.style.transform=`translate3d(${tx.toFixed(2)}px,${tyc.toFixed(2)}px,0) perspective(1600px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(4)})`}
   /* gaze */
   const b=cv.getBoundingClientRect(),ex=b.left+b.width*.475,ey=b.top+b.height*.392;let aimX=0,aimY=0;
   if(px!==null&&(fine.matches||now-lastMove<4000)){const dx=px-ex,dy=py-ey,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/(Math.min(vw,vh)*.38));aimX=dx/d*k;aimY=dy/d*k}
