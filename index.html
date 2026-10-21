@@ -1633,69 +1633,37 @@ html.ld-on .name .c{animation-play-state:paused}
 }
 @media (prefers-reduced-motion:reduce){.sc-hint i{animation:none}}
 
-/* ===== opening doodles: they react to the expression (smile -> curious -> grin) ===== */
-.sc-dd{position:absolute;z-index:2;pointer-events:none;transition:opacity .5s}
-.sc-left{left:max(var(--gut),3.5vw);top:36%;width:clamp(240px,23vw,400px)}
-.sc-right{right:max(var(--gut),4vw);top:22%;width:clamp(170px,17vw,290px)}
-.scb,.scs{display:block;width:100%;height:auto;overflow:visible}
-.scb .m{fill:none;stroke:var(--ink);stroke-width:4;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;transition:stroke .45s,stroke-width .45s}
-.scb .nd{fill:var(--paper-2);stroke:var(--ink);stroke-width:2.5;opacity:0;transition:opacity .4s .9s}
-.scb .ink{fill:none;stroke:var(--ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.scb .ink-f{fill:var(--ink)}
-.scb .sup,.scb .gr{stroke-dasharray:1;stroke-dashoffset:1}
-.scene.sc-ready .scb .m,.scene.sc-ready .scb .sup,.scene.sc-ready .scb .gr{stroke-dashoffset:0;transition:stroke-dashoffset 1.1s cubic-bezier(.6,0,.3,1),stroke .45s,stroke-width .45s}
-.scene.sc-ready .scb .nd{opacity:1}
-.scb .m:nth-child(2){transition-delay:.08s}.scb .m:nth-child(3),.scb .m:nth-child(4){transition-delay:.16s}
-.scb .m:nth-child(n+5){transition-delay:.3s}.scb .m:nth-child(n+10){transition-delay:.45s}
-.scb-load{opacity:0;transform:translateY(-26px);transition:opacity .35s,transform .45s cubic-bezier(.3,1.6,.5,1)}
-.scb-truss{transform-origin:170px 150px;transition:transform .5s}
-/* curious: load arrives, members light up (blue = pulled, orange = squeezed), bridge sags a touch */
-.scene[data-mood="curious"] .scb-load{opacity:1;transform:none;animation:scb-push 1.1s ease-in-out .5s infinite}
-.scene[data-mood="curious"] .scb .m.t,.scene[data-mood="grin"] .scb .m.t{stroke:var(--tension);stroke-width:5}
-.scene[data-mood="curious"] .scb .m.c,.scene[data-mood="grin"] .scb .m.c{stroke:var(--cline,#C98200);stroke-width:5}
-.scene[data-mood="curious"] .scb-truss{animation:scb-sag 1.1s ease-in-out .5s infinite}
-@keyframes scb-push{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-@keyframes scb-sag{0%,100%{transform:scaleY(1)}50%{transform:scaleY(1.035) translateY(2px)}}
-.scene[data-mood="grin"] .scb-load{opacity:1;transform:none}
-/* thought bubbles drift from his head towards the bridge */
-.sc-think{position:absolute;right:-14%;top:-6%;width:40%;height:40%}
-.sc-think i{position:absolute;border:2.5px solid var(--ink);border-radius:50%;background:var(--paper-2);opacity:0;transform:scale(.3);transition:opacity .3s,transform .4s cubic-bezier(.3,1.6,.5,1)}
-.sc-think i:nth-child(1){width:12px;height:12px;right:0;bottom:0}
-.sc-think i:nth-child(2){width:18px;height:18px;right:28%;bottom:30%;transition-delay:.12s}
-.sc-think i:nth-child(3){width:26px;height:26px;right:60%;bottom:62%;transition-delay:.24s}
-.scene[data-mood="curious"] .sc-think i{opacity:1;transform:none}
-/* grin: the stamp lands */
-.sc-stamp{position:absolute;right:-4%;bottom:-16%;display:flex;align-items:center;gap:8px;padding:8px 14px 7px;border:3px solid var(--ink);border-radius:12px;background:var(--comp);color:var(--on-comp);font-family:var(--f-display);font-size:clamp(16px,1.5vw,24px);white-space:nowrap;box-shadow:4px 4px 0 var(--ink);opacity:0;transform:rotate(-8deg) scale(1.9);transition:opacity .15s,transform .38s cubic-bezier(.3,1.5,.5,1)}
-.sc-stamp b{display:grid;place-items:center;width:1.3em;height:1.3em;border-radius:50%;background:var(--ink);color:var(--comp);font-size:.8em}
-.scene[data-mood="grin"] .sc-stamp{opacity:1;transform:rotate(-8deg) scale(1)}
-/* right side: sparkles (smile), question marks (curious), confetti (grin) */
-.scs .spk path{fill:var(--comp);stroke:var(--ink);stroke-width:2.5;stroke-linejoin:round;transform-box:fill-box;transform-origin:center;opacity:0;transform:scale(.2);transition:opacity .35s,transform .45s cubic-bezier(.3,1.6,.5,1)}
-.scene[data-mood="smile"].sc-ready .scs .spk path{opacity:1;transform:none;animation:sc-tw 2.4s ease-in-out infinite}
-.scs .spk path:nth-child(2){animation-delay:.8s!important;transition-delay:.1s}.scs .spk path:nth-child(3){animation-delay:1.6s!important;transition-delay:.2s}
-@keyframes sc-tw{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(.72) rotate(18deg)}}
-.sc-q{position:absolute;inset:0}
-.sc-q span{position:absolute;font-family:var(--f-display);color:var(--tension);-webkit-text-stroke:2px var(--ink);paint-order:stroke fill;line-height:1;opacity:0;transform:scale(.2) rotate(-30deg);transition:opacity .3s,transform .5s cubic-bezier(.3,1.7,.5,1)}
-.sc-q span:nth-child(1){font-size:clamp(70px,7vw,120px);left:18%;top:8%}
-.sc-q span:nth-child(2){font-size:clamp(44px,4.4vw,74px);left:62%;top:40%;transition-delay:.12s;color:var(--comp)}
-.sc-q span:nth-child(3){font-size:clamp(34px,3.2vw,54px);left:30%;top:66%;transition-delay:.24s}
-.scene[data-mood="curious"] .sc-q span{opacity:1;transform:rotate(var(--r,-8deg));animation:sc-bob 1.6s ease-in-out infinite}
-.sc-q span:nth-child(2){--r:12deg;animation-delay:.3s!important}.sc-q span:nth-child(3){--r:-16deg;animation-delay:.6s!important}
-@keyframes sc-bob{0%,100%{translate:0 0}50%{translate:0 -8px}}
-.scs .cnf rect{opacity:0;transform-box:fill-box;transform-origin:center;stroke:var(--ink);stroke-width:1.5}
-.scs .cnf .c1{fill:var(--comp)}.scs .cnf .c2{fill:var(--tension)}.scs .cnf .c3{fill:var(--cline,#C98200)}
-.scene[data-mood="grin"] .scs .cnf rect{animation:sc-conf 1.3s cubic-bezier(.15,.7,.3,1) var(--d) both}
-@keyframes sc-conf{0%{opacity:0;transform:translate(0,0) rotate(0) scale(.4)}12%{opacity:1}80%{opacity:1}100%{opacity:.95;transform:translate(var(--dx),var(--dy)) rotate(var(--rot)) scale(1)}}
 /* the drawn guide steps aside while the 3D opening is on screen */
 body.sc-on .buddy-wrap{opacity:0!important;visibility:hidden;transition:opacity .3s,visibility 0s .3s}
+
+
+/* ===== floating 3D props around the portrait; they react to the expression ===== */
+.sc-props{position:absolute;inset:0;z-index:2;pointer-events:none}
+.sp{position:absolute;top:var(--y);width:min(var(--w),var(--mw));will-change:transform}
+.sp-l{left:var(--x)}.sp-r{right:var(--x)}
+.spi{display:block;width:100%;height:auto;-webkit-user-drag:none;user-select:none;filter:drop-shadow(0 18px 18px rgba(70,40,20,.18));
+  opacity:0;transform:translateY(40px) scale(.6) rotate(var(--rot));transition:opacity .6s calc(var(--i)*.09s),transform .9s cubic-bezier(.3,1.5,.5,1) calc(var(--i)*.09s)}
+.scene.sc-ready .spi{opacity:1;transform:rotate(var(--rot))}
+.scene.sc-ready .sp .spi{animation:sp-float calc(3.2s + var(--i)*.37s) ease-in-out calc(var(--i)*-.8s) infinite}
+@keyframes sp-float{0%,100%{translate:0 0}50%{translate:0 -14px}}
+/* curious: everything leans in towards his face, like it's curious too */
+.scene[data-mood="curious"] .sp-l .spi{transform:translateX(2.4vw) rotate(calc(var(--rot) + 16deg)) scale(1.06)}
+.scene[data-mood="curious"] .sp-r .spi{transform:translateX(-2.4vw) rotate(calc(var(--rot) - 16deg)) scale(1.06)}
+.scene[data-mood="curious"] .sp .spi{transition:transform 1.1s cubic-bezier(.3,1.25,.5,1) calc(var(--i)*.05s)}
+/* grin: they pop outward and bounce, a little celebration */
+.scene[data-mood="grin"] .sp-l .spi{transform:translateX(-1.6vw) rotate(calc(var(--rot) - 10deg)) scale(1.12)}
+.scene[data-mood="grin"] .sp-r .spi{transform:translateX(1.6vw) rotate(calc(var(--rot) + 10deg)) scale(1.12)}
+.scene[data-mood="grin"] .sp .spi{transition:transform .55s cubic-bezier(.2,2.2,.4,1) calc(var(--i)*.06s);animation:sp-hop .9s ease-in-out calc(var(--i)*.11s) infinite}
+@keyframes sp-hop{0%,100%{translate:0 0}35%{translate:0 -22px}55%{translate:0 0}70%{translate:0 -6px}}
+@media (max-width:1100px){.sp{width:min(calc(var(--w)*1.15),var(--mw))}}
 @media (max-width:760px){
-  .sc-left{left:50%;top:max(64px,8svh);width:min(64vw,300px);margin-left:calc(min(64vw,300px)*-.5)}
-  .sc-right{right:2vw;top:max(60px,7svh);width:24vw}
-  .sc-think{display:none}
-  .sc-stamp{right:auto;left:50%;bottom:-30%;transform:translateX(-50%) rotate(-6deg) scale(1.9)}
-  .scene[data-mood="grin"] .sc-stamp{transform:translateX(-50%) rotate(-6deg) scale(1)}
-  .scene.sc-top .sc-dd{opacity:0}
+  .sp:not(.sp-ph),.sp-tape,.sp-cone{display:none}
+  .sp{top:var(--py);width:var(--pw)}.sp-l{left:var(--px)}.sp-r{right:var(--px)}
+  .scene.sc-top .sc-props{opacity:0}.sc-props{transition:opacity .4s}
+  .scene[data-mood="curious"] .sp-l .spi{transform:translateX(3vw) rotate(calc(var(--rot) + 14deg)) scale(1.05)}
+  .scene[data-mood="curious"] .sp-r .spi{transform:translateX(-3vw) rotate(calc(var(--rot) - 14deg)) scale(1.05)}
 }
-@media (prefers-reduced-motion:reduce){.sc-dd *{animation:none!important}}
+@media (prefers-reduced-motion:reduce){.sp .spi{animation:none!important}}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -1804,23 +1772,7 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="page cur" data-page="home" id="pg-home">
 <section class="hero scene" id="intro">
   <div class="sc-stage" aria-hidden="true"><canvas class="sc-me" id="scMe" width="1136" height="1408"></canvas>
-    <div class="sc-dd sc-left" aria-hidden="true">
-      <svg class="scb" viewBox="0 0 340 214">
-        <g class="scb-load"><path class="ink" d="M170 6 V70"/><path class="ink-f" d="M159 56 L170 78 L181 56 Z"/></g>
-        <g class="scb-truss"><path class="m c" pathLength="1" d="M70 90 H270"/><path class="m t" pathLength="1" d="M20 150 H320"/><path class="m c" pathLength="1" d="M20 150 L70 90"/><path class="m c" pathLength="1" d="M320 150 L270 90"/><path class="m c" pathLength="1" d="M70 150 V90"/><path class="m c" pathLength="1" d="M120 150 V90"/><path class="m c" pathLength="1" d="M170 150 V90"/><path class="m c" pathLength="1" d="M220 150 V90"/><path class="m c" pathLength="1" d="M270 150 V90"/><path class="m t" pathLength="1" d="M70 90 L120 150"/><path class="m t" pathLength="1" d="M120 90 L170 150"/><path class="m t" pathLength="1" d="M270 90 L220 150"/><path class="m t" pathLength="1" d="M220 90 L170 150"/><circle class="nd" cx="20" cy="150" r="4"/><circle class="nd" cx="70" cy="150" r="4"/><circle class="nd" cx="120" cy="150" r="4"/><circle class="nd" cx="170" cy="150" r="4"/><circle class="nd" cx="220" cy="150" r="4"/><circle class="nd" cx="270" cy="150" r="4"/><circle class="nd" cx="320" cy="150" r="4"/><circle class="nd" cx="70" cy="90" r="4"/><circle class="nd" cx="120" cy="90" r="4"/><circle class="nd" cx="170" cy="90" r="4"/><circle class="nd" cx="220" cy="90" r="4"/><circle class="nd" cx="270" cy="90" r="4"/></g>
-        <g class="scb-sup"><path class="ink sup" pathLength="1" d="M20 152 L7 176 H33 Z"/><path class="ink sup" pathLength="1" d="M320 152 L307 176 H333 Z"/>
-          <path class="ink gr" pathLength="1" d="M0 180 H60 M280 180 H340 M6 180 l-6 9 M18 180 l-6 9 M30 180 l-6 9 M42 180 l-6 9 M54 180 l-6 9 M286 180 l-6 9 M298 180 l-6 9 M310 180 l-6 9 M322 180 l-6 9 M334 180 l-6 9"/></g>
-      </svg>
-      <div class="sc-stamp"><span>Held 5.22 kN</span><b>✓</b></div>
-      <div class="sc-think"><i></i><i></i><i></i></div>
-    </div>
-    <div class="sc-dd sc-right" aria-hidden="true">
-      <svg class="scs" viewBox="0 0 260 260">
-        <g class="spk"><path d="M60 40 Q64 64 88 68 Q64 72 60 96 Q56 72 32 68 Q56 64 60 40Z"/><path d="M190 110 Q193 128 211 131 Q193 134 190 152 Q187 134 169 131 Q187 128 190 110Z"/><path d="M96 170 Q98 182 110 184 Q98 186 96 198 Q94 186 82 184 Q94 182 96 170Z"/></g>
-        <g class="cnf"><rect x="126" y="126" width="10" height="18" rx="2" style="--dx:-96px;--dy:-84px;--rot:40deg;--d:0s" class="c1"/><rect x="126" y="126" width="8" height="14" rx="2" style="--dx:-40px;--dy:-112px;--rot:-30deg;--d:0.04s" class="c2"/><rect x="126" y="126" width="12" height="8" rx="2" style="--dx:30px;--dy:-118px;--rot:70deg;--d:0.02s" class="c3"/><rect x="126" y="126" width="9" height="16" rx="2" style="--dx:92px;--dy:-80px;--rot:-50deg;--d:0.06s" class="c1"/><rect x="126" y="126" width="10" height="10" rx="2" style="--dx:112px;--dy:-20px;--rot:20deg;--d:0.03s" class="c2"/><rect x="126" y="126" width="14" height="7" rx="2" style="--dx:104px;--dy:46px;--rot:-60deg;--d:0.05s" class="c3"/><rect x="126" y="126" width="8" height="16" rx="2" style="--dx:52px;--dy:104px;--rot:30deg;--d:0s" class="c1"/><rect x="126" y="126" width="10" height="10" rx="2" style="--dx:-12px;--dy:118px;--rot:-20deg;--d:0.07s" class="c2"/><rect x="126" y="126" width="12" height="8" rx="2" style="--dx:-74px;--dy:92px;--rot:55deg;--d:0.02s" class="c3"/><rect x="126" y="126" width="9" height="15" rx="2" style="--dx:-112px;--dy:30px;--rot:-35deg;--d:0.05s" class="c1"/><rect x="126" y="126" width="7" height="12" rx="2" style="--dx:-118px;--dy:-34px;--rot:65deg;--d:0.08s" class="c2"/><rect x="126" y="126" width="11" height="9" rx="2" style="--dx:70px;--dy:-60px;--rot:-15deg;--d:0.09s" class="c3"/></g>
-      </svg>
-      <div class="sc-q"><span>?</span><span>?</span><span>?</span></div>
-    </div></div>
+    <div class="sc-props" aria-hidden="true"><span class="sp sp-hardhat sp-l sp-ph" style="--x:7%;--y:19%;--w:13vw;--mw:230px;--rot:-12deg;--dp:1.3;--i:0;--px:5%;--py:15%;--pw:25vw" data-dp="1.3"><img class="spi" src="img/prop_hardhat.webp" alt="" decoding="async"></span><span class="sp sp-blueprint sp-l" style="--x:2.5%;--y:45%;--w:15vw;--mw:260px;--rot:9deg;--dp:0.8;--i:1" data-dp="0.8"><img class="spi" src="img/prop_blueprint.webp" alt="" decoding="async"></span><span class="sp sp-tape sp-l sp-ph" style="--x:12%;--y:65%;--w:10.5vw;--mw:190px;--rot:-7deg;--dp:1.6;--i:2;--px:3%;--py:74%;--pw:22vw" data-dp="1.6"><img class="spi" src="img/prop_tape.webp" alt="" decoding="async"></span><span class="sp sp-bridge sp-r sp-ph" style="--x:4%;--y:17%;--w:17vw;--mw:300px;--rot:5deg;--dp:1.0;--i:3;--px:4%;--py:14%;--pw:32vw" data-dp="1.0"><img class="spi" src="img/prop_bridge.webp" alt="" decoding="async"></span><span class="sp sp-mug sp-r" style="--x:14%;--y:45%;--w:8.5vw;--mw:150px;--rot:-9deg;--dp:1.8;--i:4" data-dp="1.8"><img class="spi" src="img/prop_mug.webp" alt="" decoding="async"></span><span class="sp sp-cone sp-r sp-ph" style="--x:5%;--y:63%;--w:10vw;--mw:180px;--rot:11deg;--dp:1.2;--i:5;--px:4%;--py:72%;--pw:20vw" data-dp="1.2"><img class="spi" src="img/prop_cone.webp" alt="" decoding="async"></span></div></div>
   <div class="sc-fg">
     <div class="sc-open wrap">
   <div class="hero-top">
@@ -4269,7 +4221,7 @@ ORDER.forEach(n=>{img[n]=load('img/face_'+n+'.webp');spr[n]=[0,1].map(k=>load('i
 const BOX=[0,1].map(k=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ORDER.forEach(n=>{const e=EY[n][k];e.poly.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});y0=Math.min(y0,e.c[1]-e.R);y1=Math.max(y1,e.c[1]+e.R)});
   return [Math.floor(x0-6),Math.floor(y0-6),Math.ceil(x1-x0+12),Math.ceil(y1-y0+12)]});
 const red=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');
-let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null;
+let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null;
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 function path(pts,close){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));if(close)ctx.closePath()}
 function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];ctx.save();ctx.globalAlpha=alpha;path(e.poly,1);ctx.clip();
@@ -4302,6 +4254,9 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   if(Math.abs(tx-gx)>.03||Math.abs(ty-gy)>.03)busy=true;else{gx=tx;gy=ty}
   if(!red.matches){const bt=now-blinkT;if(bt>0){blink=bt<90?bt/90:bt<180?1-(bt-90)/90:0;busy=true;if(bt>=180){blink=0;blinkT=now+2600+Math.random()*3400}}}
   if(!red.matches){const op=cl(1-pT*7,0,1);if(openEl&&openEl.style.opacity!==String(op))openEl.style.opacity=op}
+  if(!props)props=[...sec.querySelectorAll('.sp')].map(el=>({el,d:+el.dataset.dp||1,x:0,y:0}));
+  {const mx=px===null?0:(px/vw-.5),my=py===null?0:(py/vh-.5);for(const q of props){const txp=-mx*q.d*34,typ=-my*q.d*22-(vw>760?p*(30+q.d*8):0);q.x+=(txp-q.x)*.12;q.y+=(typ-q.y)*.12;
+    if(Math.abs(txp-q.x)>.2||Math.abs(typ-q.y)>.2)busy=true;q.el.style.transform=`translate3d(${q.x.toFixed(1)}px,${q.y.toFixed(1)}px,0) scale(${(1+p*.07).toFixed(3)})`}}
   const [i,f]=exprAt(p),mood=ORDER[f>.5?i+1:i];if(sec.dataset.mood!==mood)sec.dataset.mood=mood;sec.classList.toggle('sc-top',p<.08);
   document.body.classList.toggle('sc-on',r.bottom>vh*.35&&r.top<vh*.5);
   const eKey=i+':'+f.toFixed(3),gKey=gx.toFixed(2)+','+gy.toFixed(2)+','+blink.toFixed(2);
