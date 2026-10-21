@@ -4278,12 +4278,12 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   const r=sec.getBoundingClientRect(),vh=innerHeight,vw=innerWidth,span=Math.max(1,r.height-vh);
   const pT=cl(-r.top/span,0,1);if(pS===null||red.matches)pS=pT;else pS+=(pT-pS)*.16;if(Math.abs(pT-pS)<.0004)pS=pT;
   const p=pS;let busy=pS!==pT;
-  if(red.matches){cv.style.transform=''}else{
+  {
     const e=ease(Math.min(1,p/.85)),w=cv.offsetWidth,h=cv.offsetHeight,fx=cv.offsetLeft+w*.475,fy=cv.offsetTop+h*.40;
     const ph=vw<=760,maxS=Math.max(1,ph?Math.min(2,vw*.98/(w*.48)):Math.min(2.4,vw*.44/(w*.48),vh*.9/(h*.6))),tx=(vw*.5-fx)*e,ty=(vh*(ph?.64:.46)-fy)*e,sc=1+(maxS-1)*e;
     /* the portrait itself turns with the scroll: a little head-turn while smiling, cocks his head when curious, leans back into the grin */
     const sm=t=>t*t*(3-2*t),seg=(a,b)=>sm(cl((p-a)/(b-a),0,1));
-    const rz=-7*seg(.12,.4)+11*seg(.56,.82),ry=14*seg(0,.26)-24*seg(.3,.56)+10*seg(.64,.9),rx=-4*seg(.6,.9);
+    const k=red.matches?.6:1,rz=k*(-7*seg(.12,.4)+11*seg(.56,.82)),ry=k*(14*seg(0,.26)-24*seg(.3,.56)+10*seg(.64,.9)),rx=k*(-4*seg(.6,.9));
     const ov=Math.abs(Math.sin(rz*Math.PI/180))*w*sc*.55+Math.abs(Math.sin(ry*Math.PI/180))*h*.08+12;
     const tyc=Math.max(ty,vh+ov-(cv.offsetTop+h*.4+h*.6*sc));
     cv.style.transform=`translate3d(${tx.toFixed(2)}px,${tyc.toFixed(2)}px,0) perspective(1600px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(4)})`}
@@ -4294,7 +4294,7 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   const tx=aimX*9.5,ty=aimY*(aimY<0?4:5.5),sm=red.matches?1:.2;gx+=(tx-gx)*sm;gy+=(ty-gy)*sm;
   if(Math.abs(tx-gx)>.03||Math.abs(ty-gy)>.03)busy=true;else{gx=tx;gy=ty}
   if(!red.matches){const bt=now-blinkT;if(bt>0){blink=bt<90?bt/90:bt<180?1-(bt-90)/90:0;busy=true;if(bt>=180){blink=0;blinkT=now+2600+Math.random()*3400}}}
-  if(!red.matches){const op=cl(1-pT*7,0,1);if(openEl&&openEl.style.opacity!==String(op))openEl.style.opacity=op}
+  {const op=cl(1-pT*7,0,1);if(openEl&&openEl.style.opacity!==String(op))openEl.style.opacity=op}
   {const ob=orbitEl||(orbitEl=document.getElementById('scOrbit'));if(ob){const cr=cv.getBoundingClientRect(),sr=cv.offsetParent.getBoundingClientRect(),ox=cr.left-sr.left+cr.width*.475,oy=cr.top-sr.top+cr.height*.36,dia=cr.width*(1.02+p*.25)/100;
     ob.style.transform=`translate3d(${ox.toFixed(1)}px,${oy.toFixed(1)}px,0) rotate(${(p*150).toFixed(2)}deg) scale(${dia.toFixed(3)})`;
     const parts=ob.children;if(parts[2])parts[2].style.transform=`rotate(${(-p*260).toFixed(1)}deg) scale(${(1+p*.35).toFixed(3)})`}}
