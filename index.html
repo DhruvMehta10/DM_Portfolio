@@ -1605,7 +1605,7 @@ html.ld-on .name .c{animation-play-state:paused}
 /* ===== scroll-zoom opening (after about.senbuzy.com) ===== */
 .hero.scene{padding:0;position:relative;overflow:clip;--paper:#F0E0CF;--paper-2:#F8EEE3;--ink:#0D1724;--mute:#5A5249;--rule:#D8C6B2;--tension:#2453C9;--comp:#F2B300;--on-comp:#0D1724;color:var(--ink);background:#F0E0CF}
 .sc-stage{position:sticky;top:0;height:100vh;height:100svh;margin-bottom:-100vh;margin-bottom:-100svh;overflow:hidden;background:#F0E0CF;z-index:0}
-.sc-me{position:absolute;bottom:0;right:max(var(--gut),calc((100vw - 1440px)/2 + var(--gut)));height:min(90svh,calc((100vw - 2*var(--gut))*.62));width:auto;transform-origin:48% 41%;will-change:transform;-webkit-user-drag:none;user-select:none;pointer-events:none}
+.sc-me{position:absolute;bottom:0;aspect-ratio:1136/1408;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 7%),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(to bottom,transparent,#000 7%),linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-composite:intersect;right:max(var(--gut),calc((100vw - 1440px)/2 + var(--gut)));height:min(90svh,calc((100vw - 2*var(--gut))*.62));width:auto;transform-origin:48% 41%;will-change:transform;-webkit-user-drag:none;user-select:none;pointer-events:none}
 .sc-fg{position:relative;z-index:1}
 .sc-open{min-height:calc(100svh - 60px);display:flex;flex-direction:column;justify-content:space-between;padding-block:clamp(28px,4vw,56px) clamp(20px,3vw,36px)}
 .scene .hero-top{grid-template-columns:1fr;max-width:min(640px,48vw);gap:22px}
@@ -1623,13 +1623,16 @@ html.ld-on .name .c{animation-play-state:paused}
 .hello-fig[hidden]{display:none!important}
 .hello-top:has(.hello-fig[hidden]){grid-template-columns:1fr}
 @media (max-width:760px){
-  .sc-me{right:50%;height:min(54svh,120vw);margin-right:calc(min(54svh,120vw)*-.4035)}
+  .sc-me{right:50%;height:min(58svh,124vw);margin-right:calc(min(58svh,124vw)*-.4035)}
   .scene .hero-top{max-width:none}
   .sc-open{min-height:calc(100svh - 56px)}
   .sc-cards{gap:56svh;padding-top:34svh}
   .sc-card{max-width:none}
 }
 @media (prefers-reduced-motion:reduce){.sc-card{opacity:1;transform:none}.sc-hint i{animation:none}}
+
+.sc-run{height:230vh;height:230svh}
+@media (max-width:760px){.sc-run{height:200svh}}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -1737,7 +1740,7 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="pages" id="pages">
 <div class="page cur" data-page="home" id="pg-home">
 <section class="hero scene" id="intro">
-  <div class="sc-stage" aria-hidden="true"><img class="sc-me" id="scMe" src="img/me_3d.webp" width="1136" height="1408" alt="" fetchpriority="high" decoding="async"></div>
+  <div class="sc-stage" aria-hidden="true"><canvas class="sc-me" id="scMe" width="1136" height="1408"></canvas></div>
   <div class="sc-fg">
     <div class="sc-open wrap">
   <div class="hero-top">
@@ -1751,14 +1754,7 @@ apply(window.SKY.pickHour(pick)??now());
   </div>
       <div class="sc-hint mono"><i></i>Scroll</div>
     </div>
-    <ol class="sc-cards wrap" aria-label="My path so far">
-      <li class="sc-card"><span class="sc-yr mono">2019</span><h3>Ahmedabad to New Brunswick</h3><p>I moved to Canada and started a two-year structural diploma at NBCC.</p></li>
-      <li class="sc-card"><span class="sc-yr mono">2021 – 2023</span><h3>Design office, then steel</h3><p>Structural associate at Varcon, then project manager at Ocean Steel.</p></li>
-      <li class="sc-card"><span class="sc-yr mono">2023</span><h3>Back to school at UNB</h3><p>Bachelor's in civil engineering, graduating in 2027.</p></li>
-      <li class="sc-card"><span class="sc-yr mono">2024 – 2025</span><h3>Bridge inspector for the province</h3><p>Walking bridges across New Brunswick and rating every part.</p></li>
-      <li class="sc-card"><span class="sc-yr mono">2026</span><h3>Research at Waterloo</h3><p>A summer in the Structural Health Monitoring Lab, testing a robot that checks bridges.</p></li>
-      <li class="sc-card"><span class="sc-yr mono">Now</span><h3>Looking for a full-time role</h3><p>Fourth year, VP Competitions for our CSCE chapter, and ready to work.</p></li>
-    </ol>
+    <div class="sc-run" aria-hidden="true"></div>
   </div>
   <div class="orb" id="orb" aria-hidden="true">
     <svg viewBox="-60 -60 120 120">
@@ -4184,20 +4180,50 @@ window.I18N_FR={"d": {"Hello": "Bonjour", "Research": "Recherche", "Projects": "
   if(start==='fr')apply('fr')})();
 </script>
 
-<script>/* scroll-zoom opening: the portrait pushes in on the face as you scroll, cards float over it */
-(()=>{const sec=document.getElementById('intro'),img=document.getElementById('scMe');if(!sec||!img)return;
-const cards=[...sec.querySelectorAll('.sc-card')];const red=matchMedia('(prefers-reduced-motion: reduce)');
-let raf=0;const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
-function frame(){raf=0;if(!sec.offsetParent)return;
+<script>/* scroll-zoom opening: three expressions blend as you scroll, the eyes follow the cursor */
+(()=>{const sec=document.getElementById('intro'),cv=document.getElementById('scMe');if(!sec||!cv||!cv.getContext)return;
+const ctx=cv.getContext('2d'),EY={"smile":[{"c":[423.5,553.5],"r":32.5,"R":35,"poly":[[359.0,561.0],[360.8,558.5],[363.2,554.9],[366.4,550.8],[370.0,547.0],[374.2,543.3],[379.1,539.5],[384.4,535.9],[390.0,533.0],[395.9,530.7],[402.2,528.9],[408.6,527.7],[415.0,527.0],[421.6,527.1],[428.6,527.8],[434.9,528.9],[440.0,530.0],[443.1,530.9],[444.9,531.8],[446.3,533.1],[448.0,535.0],[450.4,537.9],[453.0,541.4],[455.6,545.3],[458.0,549.0],[460.2,552.5],[462.3,556.1],[464.3,559.6],[466.0,563.0],[467.6,566.6],[469.0,570.4],[470.2,573.7],[471.0,576.0],[469.5,576.9],[467.2,578.2],[464.7,579.7],[462.0,581.0],[459.6,582.1],[457.3,583.1],[454.3,584.0],[450.0,585.0],[443.8,586.2],[436.1,587.6],[427.9,588.6],[420.0,589.0],[412.3,588.4],[404.4,587.2],[396.8,585.6],[390.0,584.0],[384.1,582.6],[378.8,581.2],[374.1,579.4],[370.0,577.0],[366.4,573.3],[363.2,568.6],[360.8,564.1]],"top":[[359.0,561.0],[360.8,558.5],[363.2,554.9],[366.4,550.8],[370.0,547.0],[374.2,543.3],[379.1,539.5],[384.4,535.9],[390.0,533.0],[395.9,530.7],[402.2,528.9],[408.6,527.7],[415.0,527.0],[421.6,527.1],[428.6,527.8],[434.9,528.9],[440.0,530.0],[443.1,530.9],[444.9,531.8],[446.3,533.1],[448.0,535.0],[450.4,537.9],[453.0,541.4],[455.6,545.3],[458.0,549.0],[460.2,552.5],[462.3,556.1],[464.3,559.6],[466.0,563.0],[467.6,566.6],[469.0,570.4],[470.2,573.7],[471.0,576.0]]},{"c":[655.5,548.5],"r":31.5,"R":34,"poly":[[602.0,569.0],[603.0,565.6],[604.4,560.6],[606.1,555.3],[608.0,551.0],[610.2,548.2],[612.6,546.1],[615.3,544.2],[618.0,542.0],[620.7,539.1],[623.5,535.8],[626.5,532.6],[630.0,530.0],[634.0,527.9],[638.5,526.2],[643.2,524.9],[648.0,524.0],[652.9,523.6],[657.9,523.6],[663.0,524.0],[668.0,525.0],[673.1,526.7],[678.3,529.1],[683.4,531.6],[688.0,534.0],[692.1,536.0],[695.8,537.8],[699.4,539.7],[703.0,542.0],[706.9,544.8],[711.0,548.0],[714.8,551.2],[718.0,554.0],[720.5,556.5],[722.4,558.8],[723.9,560.7],[725.0,562.0],[722.3,563.7],[718.4,566.2],[714.1,568.8],[710.0,571.0],[706.2,572.5],[702.5,573.8],[698.8,574.8],[695.0,576.0],[691.5,577.3],[688.1,578.7],[684.5,580.0],[680.0,581.0],[674.5,581.8],[668.1,582.4],[661.5,582.9],[655.0,583.0],[648.5,582.8],[641.9,582.4],[635.5,581.7],[630.0,581.0],[625.5,580.2],[621.8,579.4],[618.4,578.3],[615.0,577.0],[611.3,575.1],[607.6,572.8],[604.3,570.5]],"top":[[602.0,569.0],[603.0,565.6],[604.4,560.6],[606.1,555.3],[608.0,551.0],[610.2,548.2],[612.6,546.1],[615.3,544.2],[618.0,542.0],[620.7,539.1],[623.5,535.8],[626.5,532.6],[630.0,530.0],[634.0,527.9],[638.5,526.2],[643.2,524.9],[648.0,524.0],[652.9,523.6],[657.9,523.6],[663.0,524.0],[668.0,525.0],[673.1,526.7],[678.3,529.1],[683.4,531.6],[688.0,534.0],[692.1,536.0],[695.8,537.8],[699.4,539.7],[703.0,542.0],[706.9,544.8],[711.0,548.0],[714.8,551.2],[718.0,554.0],[720.5,556.5],[722.4,558.8],[723.9,560.7],[725.0,562.0]]}],"curious":[{"c":[423,559],"r":32,"R":34,"poly":[[354.0,566.0],[356.0,564.2],[358.8,561.6],[361.9,558.7],[365.0,556.0],[368.0,553.4],[371.0,550.8],[374.0,548.2],[377.0,546.0],[379.8,544.3],[382.5,542.9],[385.2,541.5],[388.0,540.0],[390.9,538.0],[393.8,535.8],[396.8,533.7],[400.0,532.0],[403.5,530.8],[407.2,529.9],[411.0,529.4],[415.0,529.0],[419.2,528.9],[423.5,528.9],[427.8,529.3],[432.0,530.0],[436.0,531.1],[440.0,532.5],[443.7,534.2],[447.0,536.0],[449.7,537.9],[451.9,539.9],[453.9,542.3],[456.0,545.0],[458.3,548.3],[460.7,551.9],[463.0,555.9],[465.0,560.0],[466.9,564.7],[468.6,569.9],[470.0,574.7],[471.0,578.0],[469.5,579.8],[467.2,582.3],[464.7,585.0],[462.0,587.0],[459.6,588.2],[457.1,588.9],[454.1,589.4],[450.0,590.0],[444.3,590.9],[437.5,591.9],[430.2,592.7],[423.0,593.0],[415.8,592.7],[408.4,592.1],[401.2,591.1],[395.0,590.0],[389.9,588.7],[385.6,587.2],[381.7,585.6],[378.0,584.0],[374.4,582.4],[371.1,580.8],[368.0,579.1],[365.0,577.0],[361.9,574.3],[358.7,571.1],[355.9,568.1]],"top":[[354.0,566.0],[356.0,564.2],[358.8,561.6],[361.9,558.7],[365.0,556.0],[368.0,553.4],[371.0,550.8],[374.0,548.2],[377.0,546.0],[379.8,544.3],[382.5,542.9],[385.2,541.5],[388.0,540.0],[390.9,538.0],[393.8,535.8],[396.8,533.7],[400.0,532.0],[403.5,530.8],[407.2,529.9],[411.0,529.4],[415.0,529.0],[419.2,528.9],[423.5,528.9],[427.8,529.3],[432.0,530.0],[436.0,531.1],[440.0,532.5],[443.7,534.2],[447.0,536.0],[449.7,537.9],[451.9,539.9],[453.9,542.3],[456.0,545.0],[458.3,548.3],[460.7,551.9],[463.0,555.9],[465.0,560.0],[466.9,564.7],[468.6,569.9],[470.0,574.7],[471.0,578.0]]},{"c":[655,550],"r":31,"R":33,"poly":[[602.0,571.0],[603.0,567.1],[604.4,561.6],[606.1,555.7],[608.0,551.0],[610.2,548.0],[612.6,546.0],[615.3,544.2],[618.0,542.0],[620.7,539.1],[623.5,535.9],[626.5,532.8],[630.0,530.0],[634.0,527.5],[638.5,525.2],[643.2,523.3],[648.0,522.0],[652.9,521.4],[657.9,521.4],[663.0,521.9],[668.0,523.0],[673.1,524.9],[678.3,527.6],[683.4,530.5],[688.0,533.0],[692.2,534.9],[696.1,536.4],[699.6,538.0],[703.0,540.0],[706.1,542.4],[708.9,545.1],[711.6,548.0],[714.0,551.0],[716.4,554.4],[718.7,558.2],[720.6,561.6],[722.0,564.0],[719.9,565.3],[716.9,567.1],[713.5,569.2],[710.0,571.0],[706.5,572.6],[702.7,574.1],[698.8,575.6],[695.0,577.0],[691.5,578.4],[688.1,579.8],[684.5,581.0],[680.0,582.0],[674.5,582.8],[668.1,583.4],[661.5,583.9],[655.0,584.0],[648.5,583.8],[641.9,583.4],[635.5,582.7],[630.0,582.0],[625.5,581.2],[621.8,580.3],[618.4,579.3],[615.0,578.0],[611.3,576.3],[607.6,574.2],[604.3,572.3]],"top":[[602.0,571.0],[603.0,567.1],[604.4,561.6],[606.1,555.7],[608.0,551.0],[610.2,548.0],[612.6,546.0],[615.3,544.2],[618.0,542.0],[620.7,539.1],[623.5,535.9],[626.5,532.8],[630.0,530.0],[634.0,527.5],[638.5,525.2],[643.2,523.3],[648.0,522.0],[652.9,521.4],[657.9,521.4],[663.0,521.9],[668.0,523.0],[673.1,524.9],[678.3,527.6],[683.4,530.5],[688.0,533.0],[692.2,534.9],[696.1,536.4],[699.6,538.0],[703.0,540.0],[706.1,542.4],[708.9,545.1],[711.6,548.0],[714.0,551.0],[716.4,554.4],[718.7,558.2],[720.6,561.6],[722.0,564.0]]}],"grin":[{"c":[423.5,556.5],"r":32.5,"R":35,"poly":[[352.0,565.0],[354.4,563.0],[357.8,560.1],[361.5,556.9],[365.0,554.0],[368.1,551.5],[371.1,549.1],[374.0,546.9],[377.0,545.0],[379.7,543.7],[382.1,542.8],[385.0,541.7],[389.0,540.0],[394.5,537.0],[401.2,533.1],[408.2,529.4],[415.0,527.0],[421.7,526.4],[428.5,527.1],[434.8,528.1],[440.0,529.0],[443.6,529.3],[446.1,529.4],[448.1,529.9],[450.0,531.0],[451.9,533.0],[453.6,535.8],[455.2,538.8],[457.0,542.0],[459.0,545.1],[461.0,548.4],[463.0,551.9],[465.0,556.0],[467.0,561.2],[469.0,567.4],[470.8,573.1],[472.0,577.0],[470.2,578.3],[467.8,580.2],[464.9,582.3],[462.0,584.0],[459.5,585.2],[457.1,586.2],[454.1,587.1],[450.0,588.0],[444.3,589.0],[437.5,589.9],[430.2,590.7],[423.0,591.0],[415.8,590.7],[408.4,590.0],[401.2,589.0],[395.0,588.0],[389.9,586.9],[385.6,585.7],[381.7,584.4],[378.0,583.0],[374.5,581.7],[371.2,580.4],[368.2,578.9],[365.0,577.0],[361.4,574.1],[357.7,570.6],[354.3,567.3]],"top":[[352.0,565.0],[354.4,563.0],[357.8,560.1],[361.5,556.9],[365.0,554.0],[368.1,551.5],[371.1,549.1],[374.0,546.9],[377.0,545.0],[379.7,543.7],[382.1,542.8],[385.0,541.7],[389.0,540.0],[394.5,537.0],[401.2,533.1],[408.2,529.4],[415.0,527.0],[421.7,526.4],[428.5,527.1],[434.8,528.1],[440.0,529.0],[443.6,529.3],[446.1,529.4],[448.1,529.9],[450.0,531.0],[451.9,533.0],[453.6,535.8],[455.2,538.8],[457.0,542.0],[459.0,545.1],[461.0,548.4],[463.0,551.9],[465.0,556.0],[467.0,561.2],[469.0,567.4],[470.8,573.1],[472.0,577.0]]},{"c":[656,551],"r":31.75,"R":34,"poly":[[600.0,571.0],[601.4,566.9],[603.4,561.1],[605.7,554.9],[608.0,550.0],[610.3,547.0],[612.8,544.9],[615.3,543.2],[618.0,541.0],[620.7,538.1],[623.5,534.9],[626.5,531.8],[630.0,529.0],[634.0,526.5],[638.5,524.2],[643.2,522.3],[648.0,521.0],[652.9,520.4],[657.9,520.4],[663.0,520.9],[668.0,522.0],[673.1,523.9],[678.3,526.6],[683.4,529.5],[688.0,532.0],[692.2,533.9],[696.1,535.5],[699.6,537.1],[703.0,539.0],[706.1,541.2],[708.9,543.6],[711.5,546.2],[714.0,549.0],[716.6,552.3],[719.2,556.1],[721.4,559.6],[723.0,562.0],[720.7,563.7],[717.4,566.1],[713.7,568.7],[710.0,571.0],[706.4,572.9],[702.6,574.8],[698.8,576.4],[695.0,578.0],[691.5,579.5],[688.1,580.8],[684.4,582.0],[680.0,583.0],[674.7,583.8],[668.7,584.4],[662.4,584.9],[656.0,585.0],[649.4,584.8],[642.4,584.4],[635.8,583.7],[630.0,583.0],[625.5,582.2],[621.8,581.4],[618.5,580.3],[615.0,579.0],[610.9,577.1],[606.6,574.8],[602.7,572.5]],"top":[[600.0,571.0],[601.4,566.9],[603.4,561.1],[605.7,554.9],[608.0,550.0],[610.3,547.0],[612.8,544.9],[615.3,543.2],[618.0,541.0],[620.7,538.1],[623.5,534.9],[626.5,531.8],[630.0,529.0],[634.0,526.5],[638.5,524.2],[643.2,522.3],[648.0,521.0],[652.9,520.4],[657.9,520.4],[663.0,520.9],[668.0,522.0],[673.1,523.9],[678.3,526.6],[683.4,529.5],[688.0,532.0],[692.2,533.9],[696.1,535.5],[699.6,537.1],[703.0,539.0],[706.1,541.2],[708.9,543.6],[711.5,546.2],[714.0,549.0],[716.6,552.3],[719.2,556.1],[721.4,559.6],[723.0,562.0]]}]},ORDER=['smile','curious','grin'],img={},spr={};let loaded=0,need=0;
+const load=(src,cb)=>{need++;const i=new Image();i.decoding='async';i.onload=()=>{loaded++;cb&&cb();go()};i.src=src;return i};
+ORDER.forEach(n=>{img[n]=load('img/face_'+n+'.webp');spr[n]=[0,1].map(k=>load('img/iris_'+n+'_'+k+'.png'))});
+const red=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');
+let raf=0,px=null,py=null,gx=0,gy=0,tx=0,ty=0,lastMove=0,blinkT=performance.now()+2500,blink=0;
+const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
+function eyePath(poly){ctx.beginPath();poly.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.closePath()}
+function face(n,alpha){const im=img[n];if(!im.complete||!im.naturalWidth)return;ctx.globalAlpha=alpha;ctx.drawImage(im,0,0,1136,1408);
+  EY[n].forEach((e,k)=>{const sp=spr[n][k];ctx.save();eyePath(e.poly);ctx.clip();
+    if(sp.complete&&sp.naturalWidth){const cx=e.c[0]+gx,cy=e.c[1]+gy;ctx.drawImage(sp,cx-e.R,cy-e.R)}
+    /* soft lid shadow along the upper lid */
+    ctx.lineJoin=ctx.lineCap='round';ctx.strokeStyle='rgba(30,14,6,.5)';ctx.shadowColor='rgba(30,14,6,.55)';ctx.shadowBlur=7;
+    ctx.beginPath();e.top.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.lineWidth=9;ctx.stroke();
+    ctx.shadowBlur=0;
+    if(blink>0){/* close the lids: skin-tone sweep down from the top */const ys=e.poly.map(p=>p[1]),y0=Math.min(...ys),y1=Math.max(...ys),xs=e.poly.map(p=>p[0]);
+      const h=(y1-y0+4)*blink;const g=ctx.createLinearGradient(0,y0,0,y0+h);g.addColorStop(0,'#a95f33');g.addColorStop(.8,'#c27240');g.addColorStop(1,'#3a1a0a');
+      ctx.fillStyle=g;ctx.fillRect(Math.min(...xs)-2,y0-2,Math.max(...xs)-Math.min(...xs)+4,h+2)}
+    ctx.restore()});ctx.globalAlpha=1}
+function exprAt(p){/* smile -> curious -> grin */if(p<.3)return[0,0];if(p<.38)return[0,ease((p-.3)/.08)];if(p<.64)return[1,0];if(p<.72)return[1,ease((p-.64)/.08)];return[2,0]}
+function frame(now){raf=0;if(!sec.offsetParent)return;
   const r=sec.getBoundingClientRect(),vh=innerHeight,vw=innerWidth,span=Math.max(1,r.height-vh);
-  const p=Math.min(1,Math.max(0,-r.top/span));
-  if(red.matches){img.style.transform=''}else{
-    const e=ease(Math.min(1,p/.85)),w=img.offsetWidth,h=img.offsetHeight,fx=img.offsetLeft+w*.48,fy=img.offsetTop+h*.41;
-    const tx=(vw*(vw>760?.62:.5)-fx)*e,ty=(vh*.42-fy)*e,sc=1+(vw>760?1.5:1.25)*e;
-    img.style.transform=`translate3d(${tx.toFixed(1)}px,${ty.toFixed(1)}px,0) scale(${sc.toFixed(3)})`}
-  for(const c of cards){const b=c.getBoundingClientRect();c.classList.toggle('on',b.top<vh*.82&&b.bottom>vh*.12)}}
-const go=()=>{if(!raf)raf=requestAnimationFrame(frame)};
-addEventListener('scroll',go,{passive:true});addEventListener('resize',go);addEventListener('hashchange',()=>setTimeout(go,80));img.addEventListener('load',go);go()})();
+  const p=cl(-r.top/span,0,1);
+  if(red.matches){cv.style.transform=''}else{
+    const e=ease(Math.min(1,p/.8)),w=cv.offsetWidth,h=cv.offsetHeight,fx=cv.offsetLeft+w*.475,fy=cv.offsetTop+h*.40;
+    const dx=(vw*(vw>760?.5:.5)-fx)*e,dy=(vh*.46-fy)*e,sc=1+(vw>760?1.45:1.15)*e;
+    cv.style.transform=`translate3d(${dx.toFixed(1)}px,${dy.toFixed(1)}px,0) scale(${sc.toFixed(3)})`}
+  /* gaze target */
+  const b=cv.getBoundingClientRect(),ex=b.left+b.width*.475,ey=b.top+b.height*.392;
+  let aimX=0,aimY=0;
+  if(px!==null&&now-lastMove<(fine.matches?1e9:4000)){const ddx=px-ex,ddy=py-ey,dist=Math.hypot(ddx,ddy)||1,k=Math.min(1,dist/(Math.min(vw,vh)*.38));aimX=ddx/dist*k;aimY=ddy/dist*k}
+  else{const t=now/1000;aimX=Math.sin(t*.6)*.45+Math.sin(t*1.7)*.15;aimY=Math.sin(t*.43+1)*.25}
+  tx=aimX*9.5;ty=aimY*(aimY<0?4:5.5);
+  const sm=red.matches?1:.18;gx+=(tx-gx)*sm;gy+=(ty-gy)*sm;
+  /* blink every few seconds */
+  if(!red.matches){const bt=now-blinkT;if(bt>0){blink=bt<90?bt/90:bt<180?1-(bt-90)/90:0;if(bt>=180){blink=0;blinkT=now+2600+Math.random()*3400}}}
+  const [i,f]=exprAt(p);ctx.clearRect(0,0,1136,1408);face(ORDER[i],1);if(f>0)face(ORDER[i+1],f);
+  const vis=r.bottom>0&&r.top<vh;if(vis&&(Math.abs(tx-gx)>.05||Math.abs(ty-gy)>.05||blink>0||px===null||!fine.matches||now<blinkT+400))go()}
+function go(){if(!raf)raf=requestAnimationFrame(frame)}
+addEventListener('scroll',go,{passive:true});addEventListener('resize',go);addEventListener('hashchange',()=>setTimeout(go,80));
+addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
+addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
+document.addEventListener('visibilitychange',go);go()})();
 </script>
 </body>
 </html>
