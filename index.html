@@ -1605,7 +1605,7 @@ html.ld-on .name .c{animation-play-state:paused}
 /* ===== scroll-zoom opening (after about.senbuzy.com) ===== */
 .hero.scene{padding:0;position:relative;overflow:clip;--paper:#F0E0CF;--paper-2:#F8EEE3;--ink:#0D1724;--mute:#5A5249;--rule:#D8C6B2;--tension:#2453C9;--comp:#F2B300;--on-comp:#0D1724;color:var(--ink);background:var(--stage,#F0E0CF)}
 .sc-stage{position:sticky;top:0;height:100vh;height:100svh;margin-bottom:-100vh;margin-bottom:-100svh;overflow:hidden;background:var(--stage-bg,var(--stage,#F0E0CF));z-index:0;contain:strict}
-.sc-me{--mh:min(76svh,calc(100vw*1.05));position:absolute;bottom:0;left:50%;height:var(--mh);width:calc(var(--mh)*1136/1408);margin-left:calc(var(--mh)*-568/1408);transform-origin:47.5% 40%;will-change:transform;backface-visibility:hidden;-webkit-user-drag:none;user-select:none;pointer-events:none}
+.sc-me{--mh:min(76svh,72vw);position:absolute;bottom:0;left:50%;height:var(--mh);width:calc(var(--mh)*1136/1408);margin-left:calc(var(--mh)*-568/1408);transform-origin:47.5% 40%;will-change:transform;backface-visibility:hidden;-webkit-user-drag:none;user-select:none;pointer-events:none}
 .sc-fg{position:relative;z-index:1}
 .sc-open{position:relative;min-height:calc(100svh - 60px);display:flex;flex-direction:column;align-items:center;padding-block:clamp(22px,3vw,40px) clamp(20px,3vw,36px)}
 .scene .hero-top{display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;max-width:none;width:100%}
@@ -1622,11 +1622,11 @@ html.ld-on .name .c{animation-play-state:paused}
 .hello-fig[hidden]{display:none!important}
 .hello-top:has(.hello-fig[hidden]){grid-template-columns:1fr}
 @media (max-width:760px){
-  .sc-me{--mh:min(60svh,calc(100vw*1.3))}
+  .sc-me{--mh:min(58svh,calc(100vw*1.3))}
   .sc-open{min-height:calc(100svh - 56px)}
   .scene .name{font-size:clamp(40px,12.5vw,64px);gap:0 .22em}
   .scene .eyebrow{padding-inline:clamp(56px,17vw,72px)}
-  .scene .hero-side{left:var(--gut);right:var(--gut);transform:none;width:auto}
+  .scene .hero-side{position:static;transform:none;width:auto;margin-top:10px}
   .scene .hero-cta{flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center}
   .sc-hint{display:none}
   .sc-run{height:190svh}
@@ -1664,6 +1664,21 @@ body.sc-on .buddy-wrap{opacity:0!important;visibility:hidden;transition:opacity 
   .scene[data-mood="curious"] .sp-r .spi{transform:translateX(-3vw) rotate(calc(var(--rot) - 14deg)) scale(1.05)}
 }
 @media (prefers-reduced-motion:reduce){.sp .spi{animation:none!important}}
+
+/* short landscape screens (phones on their side, small laptops in split view) */
+@media (min-width:761px) and (max-height:560px){
+  .scene .eyebrow{display:none}
+  .scene .name{font-size:clamp(30px,10vh,64px)}
+  .scene .hero-cta{flex-direction:row}
+  .sc-me{--mh:min(80svh,60vw)}
+  .sp{width:min(var(--w),20vh)}
+  .sp-blueprint,.sp-mug{display:none}
+  .sc-hint{display:none}
+}
+/* keep the lower-left prop clear of the buttons on shorter desktops */
+@media (min-width:761px) and (max-height:820px){.sp-tape{top:57%!important}.sp-blueprint{top:38%!important}.sp-hardhat{top:15%!important}}
+
+@media (min-width:761px) and (max-height:560px){.sp-tape{display:none}.sp-hardhat{top:30%!important}.sp-bridge{top:26%!important}.sp-cone{top:58%!important}}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -4244,8 +4259,9 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   const p=pS;let busy=pS!==pT;
   if(red.matches){cv.style.transform=''}else{
     const e=ease(Math.min(1,p/.85)),w=cv.offsetWidth,h=cv.offsetHeight,fx=cv.offsetLeft+w*.475,fy=cv.offsetTop+h*.40;
-    const tx=(vw*.5-fx)*e,ty=(vh*(vw>760?.46:.64)-fy)*e,sc=1+(vw>760?1.4:1.0)*e;
-    cv.style.transform=`translate3d(${tx.toFixed(2)}px,${ty.toFixed(2)}px,0) scale(${sc.toFixed(4)})`}
+    const ph=vw<=760,maxS=Math.max(1,ph?Math.min(2,vw*.98/(w*.48)):Math.min(2.4,vw*.44/(w*.48),vh*.9/(h*.6))),tx=(vw*.5-fx)*e,ty=(vh*(ph?.64:.46)-fy)*e,sc=1+(maxS-1)*e;
+    const tyc=Math.max(ty,vh-(cv.offsetTop+h*.4+h*.6*sc));
+    cv.style.transform=`translate3d(${tx.toFixed(2)}px,${tyc.toFixed(2)}px,0) scale(${sc.toFixed(4)})`}
   /* gaze */
   const b=cv.getBoundingClientRect(),ex=b.left+b.width*.475,ey=b.top+b.height*.392;let aimX=0,aimY=0;
   if(px!==null&&(fine.matches||now-lastMove<4000)){const dx=px-ex,dy=py-ey,d=Math.hypot(dx,dy)||1,k=Math.min(1,d/(Math.min(vw,vh)*.38));aimX=dx/d*k;aimY=dy/d*k}
@@ -4268,7 +4284,7 @@ function go(){if(!raf)raf=requestAnimationFrame(frame)}
 img.smile.addEventListener('load',()=>{try{const c=document.createElement('canvas');c.width=3;c.height=64;const x=c.getContext('2d');
   x.drawImage(img.smile,0,0,8,1000,0,0,1,64);x.drawImage(img.smile,1128,0,8,1000,1,0,1,64);x.drawImage(img.smile,0,0,1136,8,2,0,1,64);
   const d=x.getImageData(0,0,3,64).data,avg=col=>{let R=0,G=0,B=0;for(let y=0;y<64;y++){const k=(y*3+col)*4;R+=d[k];G+=d[k+1];B+=d[k+2]}return `${Math.round(R/64)},${Math.round(G/64)},${Math.round(B/64)}`};
-  edge={l:avg(0),r:avg(1),t:avg(2)};sec.style.setProperty('--stage',`rgb(${edge.t})`);sec.style.setProperty('--stage-bg',`linear-gradient(90deg,rgb(${edge.l}),rgb(${edge.t}) 50%,rgb(${edge.r}))`);dirty=true;go()}catch(_){}});
+  edge={l:avg(0),r:avg(1),t:avg(2)};sec.style.setProperty('--stage',`rgb(${edge.t})`);{const m=[edge.l,edge.r,edge.t].map(v=>v.split(',').map(Number)),avg=[0,1,2].map(i=>Math.round((m[0][i]+m[1][i]+m[2][i])/3)).join(',');edge.l=edge.r=edge.t=avg;sec.style.setProperty('--stage',`rgb(${avg})`);sec.style.setProperty('--stage-bg',`rgb(${avg})`)}dirty=true;go()}catch(_){}});
 addEventListener('scroll',go,{passive:true});addEventListener('resize',()=>{dirty=true;go()});addEventListener('hashchange',()=>setTimeout(go,80));
 addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
 addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
