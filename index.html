@@ -1586,6 +1586,21 @@ html.ld-on .name .c{animation-play-state:paused}
 .buddy-wrap.nogut:not(.free){display:none!important}
 @media (max-width:760px){.buddy-wrap{display:none!important}}
 @media (min-width:900px){#about .sec-head .plain,#about .sec-head p{max-width:min(68ch,calc(100% - 330px))}}
+
+/* 3D portraits */
+.portrait-fig{cursor:default}
+.portrait-fig .av-slot{display:none}
+.portrait{display:block;width:100%;height:auto;border:2.5px solid var(--ink);border-radius:22px;background:#EEDECF;-webkit-user-drag:none;user-select:none}
+.sec-portrait{position:absolute;right:clamp(16px,4vw,64px);bottom:0;width:clamp(150px,13vw,190px);margin:0;z-index:0;pointer-events:none}
+.sec-portrait img{display:block;width:100%;height:auto;aspect-ratio:645/730;object-fit:cover;object-position:50% 20%;border:2.5px solid var(--ink);border-bottom:0;border-radius:22px 22px 0 0;background:#EEDECF;-webkit-user-drag:none;user-select:none}
+#experience .sec-head>p,#experience .sec-head .h2{max-width:calc(100% - clamp(190px,20vw,280px))}
+@media (max-width:760px){
+  .sec-portrait{position:relative;right:auto;bottom:auto;float:right;width:min(124px,34vw);margin:4px 0 10px 14px}
+  .sec-portrait img{border-bottom:2.5px solid var(--ink);border-radius:18px}
+  #experience .sec-head{display:flow-root}
+  #experience .sec-head>p,#experience .sec-head .h2{max-width:none}
+  .hello-fig.portrait-fig{width:min(240px,64vw)}
+}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -1731,8 +1746,9 @@ apply(window.SKY.pickHour(pick)??now());
         <ul><li>Fourth year at UNB, graduating in 2027</li><li>VP Competitions for our CSCE student chapter</li><li>Putting together UNB's 2027 Troitsky team</li><li>Looking for a full-time role where I can do my best work</li></ul>
       </div>
     </div>
-    <figure class="hello-fig" id="helloFig" role="button" tabindex="0" aria-label="Cartoon of Dhruv doing a squat dance">
-      <div class="av-slot" id="helloAv"></div>
+    <figure class="hello-fig portrait-fig" id="helloFig">
+      <div class="av-slot" id="helloAv" hidden></div>
+      <img class="portrait" src="img/me_3d.webp" width="645" height="799" alt="3D cartoon portrait of Dhruv: buzz cut, clear glasses, short beard, navy hoodie" decoding="async">
     </figure>
   </div>
   <div class="origin">
@@ -2001,13 +2017,7 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="page" data-page="work" id="pg-experience">
 <section class="wrap sec" id="experience">
   <div class="sec-head">
-  <div class="doodle dd-exp" aria-hidden="true"><svg viewBox="0 0 260 180"><g class="dd-bob">
-<rect class="dd-board" x="22" y="22" width="120" height="150" rx="10"/><rect class="dd-paper" x="34" y="40" width="96" height="122" rx="4"/><rect class="dd-clip" x="60" y="12" width="44" height="20" rx="5"/>
-<path class="dd-check k1" d="M44 66 l6 7 l12 -14"/><path class="dd-pl" d="M70 66 H120"/>
-<path class="dd-check k2" d="M44 98 l6 7 l12 -14"/><path class="dd-pl" d="M70 98 H114"/>
-<path class="dd-check k3" d="M44 130 l6 7 l12 -14"/><path class="dd-pl" d="M70 130 H118"/>
-<g class="dd-hat"><path class="dd-hatd" d="M160 132 Q160 84 200 82 Q240 84 240 132 Z"/><path class="dd-hatr" d="M200 82 V130 M184 86 Q178 104 178 130 M216 86 Q222 104 222 130"/><path class="dd-hatb" d="M148 130 Q200 146 252 130 L252 138 Q200 154 148 138 Z"/></g>
-</g></svg></div>
+  <figure class="sec-portrait"><img src="img/me_3d_hardhat.webp" width="645" height="799" alt="3D cartoon portrait of Dhruv holding a yellow hard hat" loading="lazy" decoding="async"></figure>
   <h2 class="h2">Where I've <em>worked</em></h2>
   <p class="plain" style="margin-bottom:clamp(28px,4vw,56px)">A design office, a steel fabricator, provincial bridge crews and a research lab.</p>
   </div>
