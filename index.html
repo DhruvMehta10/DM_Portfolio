@@ -1701,6 +1701,16 @@ body.sc-on .buddy-wrap{opacity:0!important;visibility:hidden;transition:opacity 
 :root[data-theme="dark"] .spi{filter:drop-shadow(0 18px 20px rgba(0,0,0,.45))}
 
 .sp-buildings .spi,.sp-tower .spi{filter:drop-shadow(0 14px 14px rgba(70,40,20,.14))}
+
+/* ===== depth: halo behind him, soft shadow, near/far props ===== */
+.scene{--halo:#FFF6E6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .scene{--halo:#2A3A5C}}
+:root[data-theme="dark"] .scene{--halo:#2A3A5C}
+.sc-props.sc-back{z-index:0}
+.sc-back .spi{filter:blur(1.6px) saturate(.85) drop-shadow(0 12px 14px rgba(70,40,20,.12));opacity:.88}
+.sc-front{z-index:3}
+.sc-front .spi{filter:drop-shadow(0 26px 22px rgba(70,40,20,.24))}
+@media (max-width:760px){.sc-back{display:none}}
 </style>
 <script>
 /* Sky engine: the palette follows the visitor's local time of day. Runs before the page paints. */
@@ -1809,12 +1819,15 @@ apply(window.SKY.pickHour(pick)??now());
 <div class="page cur" data-page="home" id="pg-home">
 <section class="hero scene" id="intro">
   <div class="sc-stage" aria-hidden="true"><div class="sc-orbit" id="scOrbit" aria-hidden="true">
+      <svg class="ob ob-h" viewBox="0 0 1000 1000"><defs><radialGradient id="scHalo"><stop offset="0" stop-color="var(--halo)" stop-opacity=".95"/><stop offset=".55" stop-color="var(--halo)" stop-opacity=".45"/><stop offset="1" stop-color="var(--halo)" stop-opacity="0"/></radialGradient></defs><circle cx="500" cy="500" r="500" fill="url(#scHalo)"/></svg>
       <svg class="ob ob-a" viewBox="0 0 1000 1000"><circle class="ob-c" cx="500" cy="500" r="490"/><g class="ob-t"><path d="M970.0 500.0 L930.0 500.0"/><path d="M967.4 549.1 L949.5 547.2"/><path d="M959.7 597.7 L942.1 594.0"/><path d="M947.0 645.2 L929.9 639.7"/><path d="M929.4 691.2 L912.9 683.8"/><path d="M907.0 735.0 L872.4 715.0"/><path d="M880.2 776.3 L865.7 765.7"/><path d="M849.3 814.5 L835.9 802.4"/><path d="M814.5 849.3 L802.4 835.9"/><path d="M776.3 880.2 L765.7 865.7"/><path d="M735.0 907.0 L715.0 872.4"/><path d="M691.2 929.4 L683.8 912.9"/><path d="M645.2 947.0 L639.7 929.9"/><path d="M597.7 959.7 L594.0 942.1"/><path d="M549.1 967.4 L547.2 949.5"/><path d="M500.0 970.0 L500.0 930.0"/><path d="M450.9 967.4 L452.8 949.5"/><path d="M402.3 959.7 L406.0 942.1"/><path d="M354.8 947.0 L360.3 929.9"/><path d="M308.8 929.4 L316.2 912.9"/><path d="M265.0 907.0 L285.0 872.4"/><path d="M223.7 880.2 L234.3 865.7"/><path d="M185.5 849.3 L197.6 835.9"/><path d="M150.7 814.5 L164.1 802.4"/><path d="M119.8 776.3 L134.3 765.7"/><path d="M93.0 735.0 L127.6 715.0"/><path d="M70.6 691.2 L87.1 683.8"/><path d="M53.0 645.2 L70.1 639.7"/><path d="M40.3 597.7 L57.9 594.0"/><path d="M32.6 549.1 L50.5 547.2"/><path d="M30.0 500.0 L70.0 500.0"/><path d="M32.6 450.9 L50.5 452.8"/><path d="M40.3 402.3 L57.9 406.0"/><path d="M53.0 354.8 L70.1 360.3"/><path d="M70.6 308.8 L87.1 316.2"/><path d="M93.0 265.0 L127.6 285.0"/><path d="M119.8 223.7 L134.3 234.3"/><path d="M150.7 185.5 L164.1 197.6"/><path d="M185.5 150.7 L197.6 164.1"/><path d="M223.7 119.8 L234.3 134.3"/><path d="M265.0 93.0 L285.0 127.6"/><path d="M308.8 70.6 L316.2 87.1"/><path d="M354.8 53.0 L360.3 70.1"/><path d="M402.3 40.3 L406.0 57.9"/><path d="M450.9 32.6 L452.8 50.5"/><path d="M500.0 30.0 L500.0 70.0"/><path d="M549.1 32.6 L547.2 50.5"/><path d="M597.7 40.3 L594.0 57.9"/><path d="M645.2 53.0 L639.7 70.1"/><path d="M691.2 70.6 L683.8 87.1"/><path d="M735.0 93.0 L715.0 127.6"/><path d="M776.3 119.8 L765.7 134.3"/><path d="M814.5 150.7 L802.4 164.1"/><path d="M849.3 185.5 L835.9 197.6"/><path d="M880.2 223.7 L865.7 234.3"/><path d="M907.0 265.0 L872.4 285.0"/><path d="M929.4 308.8 L912.9 316.2"/><path d="M947.0 354.8 L929.9 360.3"/><path d="M959.7 402.3 L942.1 406.0"/><path d="M967.4 450.9 L949.5 452.8"/></g><circle class="ob-c2" cx="500" cy="500" r="410"/></svg>
       <svg class="ob ob-b" viewBox="0 0 1000 1000"><circle class="ob-d" cx="500" cy="500" r="380"/><g class="ob-n"><circle cx="867.2" cy="597.7" r="9"/><circle cx="769.2" cy="768.2" r="5"/><circle cx="599.0" cy="866.9" r="5"/><circle cx="402.3" cy="867.2" r="9"/><circle cx="231.8" cy="769.2" r="5"/><circle cx="133.1" cy="599.0" r="5"/><circle cx="132.8" cy="402.3" r="9"/><circle cx="230.8" cy="231.8" r="5"/><circle cx="401.0" cy="133.1" r="5"/><circle cx="597.7" cy="132.8" r="9"/><circle cx="768.2" cy="230.8" r="5"/><circle cx="866.9" cy="401.0" r="5"/></g></svg>
       <svg class="ob ob-c" viewBox="0 0 1000 1000"><circle class="ob-e" cx="500" cy="500" r="300"/><path class="ob-x" d="M500 170 V250 M500 750 V830 M170 500 H250 M750 500 H830"/></svg>
     </div>
+    <div class="sc-props sc-back" aria-hidden="true"><span class="sp sp-buildings sp-r" style="--x:21%;--y:60%;--w:15vw;--mw:270px;--rot:0deg;--dp:0.45;--i:7" data-dp="0.6"><img class="spi" src="img/prop_buildings.webp" alt="" decoding="async"></span><span class="sp sp-tower sp-r" style="--x:31%;--y:46%;--w:6.5vw;--mw:120px;--rot:0deg;--dp:0.4;--i:8" data-dp="0.7"><img class="spi" src="img/prop_tower.webp" alt="" decoding="async"></span><span class="sp sp-blueprint sp-l" style="--x:19%;--y:44%;--w:13vw;--mw:230px;--rot:9deg;--dp:0.5;--i:2" data-dp="0.8"><img class="spi" src="img/prop_blueprint.webp" alt="" decoding="async"></span></div>
     <canvas class="sc-me" id="scMe" width="1136" height="1408"></canvas>
-    <div class="sc-props" aria-hidden="true"><span class="sp sp-hardhat sp-l sp-ph" style="--x:7%;--y:14%;--w:12.5vw;--mw:220px;--rot:-12deg;--dp:1.3;--i:0;--px:5%;--py:15%;--pw:25vw" data-dp="1.3"><img class="spi" src="img/prop_hardhat.webp" alt="" decoding="async"></span><span class="sp sp-ibeam sp-l" style="--x:16%;--y:33%;--w:10.5vw;--mw:200px;--rot:-14deg;--dp:1.1;--i:1" data-dp="1.1"><img class="spi" src="img/prop_ibeam.webp" alt="" decoding="async"></span><span class="sp sp-blueprint sp-l" style="--x:2.5%;--y:45%;--w:14vw;--mw:250px;--rot:9deg;--dp:0.8;--i:2" data-dp="0.8"><img class="spi" src="img/prop_blueprint.webp" alt="" decoding="async"></span><span class="sp sp-tape sp-l" style="--x:12%;--y:63%;--w:10vw;--mw:180px;--rot:-7deg;--dp:1.6;--i:3" data-dp="1.6"><img class="spi" src="img/prop_tape.webp" alt="" decoding="async"></span><span class="sp sp-bridge sp-r sp-ph" style="--x:4%;--y:13%;--w:16vw;--mw:290px;--rot:5deg;--dp:1.0;--i:4;--px:4%;--py:14%;--pw:32vw" data-dp="1.0"><img class="spi" src="img/prop_bridge.webp" alt="" decoding="async"></span><span class="sp sp-mug sp-r" style="--x:15%;--y:37%;--w:8.5vw;--mw:150px;--rot:-9deg;--dp:1.8;--i:5" data-dp="1.8"><img class="spi" src="img/prop_mug.webp" alt="" decoding="async"></span><span class="sp sp-cone sp-r" style="--x:4%;--y:52%;--w:9vw;--mw:165px;--rot:11deg;--dp:1.2;--i:6" data-dp="1.2"><img class="spi" src="img/prop_cone.webp" alt="" decoding="async"></span><span class="sp sp-buildings sp-r" style="--x:12%;--y:73%;--w:12.5vw;--mw:230px;--rot:0deg;--dp:0.6;--i:7" data-dp="0.6"><img class="spi" src="img/prop_buildings.webp" alt="" decoding="async"></span><span class="sp sp-tower sp-r" style="--x:3%;--y:70%;--w:5.5vw;--mw:105px;--rot:0deg;--dp:0.7;--i:8" data-dp="0.7"><img class="spi" src="img/prop_tower.webp" alt="" decoding="async"></span></div></div>
+    <div class="sc-props sc-front" aria-hidden="true"><span class="sp sp-hardhat sp-l sp-ph" style="--x:7%;--y:14%;--w:12.5vw;--mw:220px;--rot:-12deg;--dp:1.3;--i:0;--px:5%;--py:15%;--pw:25vw" data-dp="1.3"><img class="spi" src="img/prop_hardhat.webp" alt="" decoding="async"></span><span class="sp sp-ibeam sp-l" style="--x:16%;--y:33%;--w:10.5vw;--mw:200px;--rot:-14deg;--dp:1.1;--i:1" data-dp="1.1"><img class="spi" src="img/prop_ibeam.webp" alt="" decoding="async"></span><span class="sp sp-tape sp-l" style="--x:20%;--y:70%;--w:12vw;--mw:220px;--rot:-7deg;--dp:2.0;--i:3" data-dp="1.6"><img class="spi" src="img/prop_tape.webp" alt="" decoding="async"></span><span class="sp sp-bridge sp-r sp-ph" style="--x:4%;--y:13%;--w:16vw;--mw:290px;--rot:5deg;--dp:1.0;--i:4;--px:4%;--py:14%;--pw:32vw" data-dp="1.0"><img class="spi" src="img/prop_bridge.webp" alt="" decoding="async"></span><span class="sp sp-mug sp-r" style="--x:15%;--y:37%;--w:8.5vw;--mw:150px;--rot:-9deg;--dp:2.2;--i:5" data-dp="1.8"><img class="spi" src="img/prop_mug.webp" alt="" decoding="async"></span><span class="sp sp-cone sp-r" style="--x:4%;--y:52%;--w:9vw;--mw:165px;--rot:11deg;--dp:1.2;--i:6" data-dp="1.2"><img class="spi" src="img/prop_cone.webp" alt="" decoding="async"></span></div>
+    </div>
   <div class="sc-fg">
     <div class="sc-open wrap">
   <div class="hero-top">
@@ -4263,7 +4276,7 @@ ORDER.forEach(n=>{img[n]=load('img/face_'+n+'.webp');spr[n]=[0,1].map(k=>load('i
 const BOX=[0,1].map(k=>{let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9;ORDER.forEach(n=>{const e=EY[n][k];e.poly.forEach(([x,y])=>{x0=Math.min(x0,x);y0=Math.min(y0,y);x1=Math.max(x1,x);y1=Math.max(y1,y)});y0=Math.min(y0,e.c[1]-e.R);y1=Math.max(y1,e.c[1]+e.R)});
   return [Math.floor(x0-6),Math.floor(y0-6),Math.ceil(x1-x0+12),Math.ceil(y1-y0+12)]});
 const red=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(pointer:fine)');
-let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null,orbitEl=null,wink=0,winkT=-1e9,winkArmed=true;
+let raf=0,px=null,py=null,gx=0,gy=0,lastMove=0,blinkT=performance.now()+2500,blink=0,pS=null,dirty=true,lastE='',lastG='',edge=null,props=null,orbitEl=null,mtx=0,mty=0,wink=0,winkT=-1e9,winkArmed=true;
 const ease=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2,cl=(v,a,b)=>Math.max(a,Math.min(b,v));
 function path(pts,close){ctx.beginPath();pts.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));if(close)ctx.closePath()}
 function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];let lash=null;ctx.save();ctx.globalAlpha=alpha;path(e.poly,1);ctx.clip();
@@ -4282,7 +4295,8 @@ function eyes(n,alpha,clipBox){EY[n].forEach((e,k)=>{const sp=spr[n][k];let lash
 function paint(i,f,full){const A=ORDER[i],B=f>0?ORDER[i+1]:null;if(!img[A].naturalWidth)return;
   const regions=full?[[0,0,1136,1408]]:BOX;
   for(const [x,y,w,h] of regions){ctx.clearRect(x,y,w,h);ctx.save();ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();
-    ctx.globalAlpha=1;ctx.drawImage(img[A],0,0);eyes(A,1);
+    ctx.globalAlpha=1;if(full){const dk=document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme: dark)').matches);ctx.save();ctx.shadowColor=dk?'rgba(0,0,0,.6)':'rgba(70,36,12,.32)';ctx.shadowBlur=46;ctx.shadowOffsetY=26;ctx.shadowOffsetX=10;ctx.drawImage(img[A],0,0);ctx.restore()}
+    ctx.drawImage(img[A],0,0);eyes(A,1);
     if(B&&img[B].naturalWidth){ctx.globalAlpha=f;ctx.drawImage(img[B],0,0);eyes(B,f)}ctx.restore()}
 }
 function exprAt(p){if(p<.3)return[0,0];if(p<.38)return[0,ease((p-.3)/.08)];if(p<.64)return[1,0];if(p<.72)return[1,ease((p-.64)/.08)];return[2,0]}
@@ -4295,7 +4309,8 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
     const ph=vw<=760,maxS=Math.max(1,ph?Math.min(2,vw*.98/(w*.48)):Math.min(2.4,vw*.44/(w*.48),vh*.9/(h*.6))),tx=(vw*.5-fx)*e,ty=(vh*(ph?.64:.46)-fy)*e,sc=1+(maxS-1)*e;
     /* the portrait itself turns with the scroll: a little head-turn while smiling, cocks his head when curious, leans back into the grin */
     const sm=t=>t*t*(3-2*t),seg=(a,b)=>sm(cl((p-a)/(b-a),0,1));
-    const k=red.matches?.6:1,rz=k*(-7*seg(.12,.4)+11*seg(.56,.82)),ry=k*(14*seg(0,.26)-24*seg(.3,.56)+10*seg(.64,.9)),rx=k*(-4*seg(.6,.9));
+    const k=red.matches?.6:1;{const mx2=px===null?0:cl(px/vw-.5,-.5,.5),my2=py===null?0:cl(py/vh-.5,-.5,.5);mtx+=(mx2-mtx)*.08;mty+=(my2-mty)*.08;if(Math.abs(mx2-mtx)>.002||Math.abs(my2-mty)>.002)busy=true}
+    const rz=k*(-7*seg(.12,.4)+11*seg(.56,.82)),ry=k*(14*seg(0,.26)-24*seg(.3,.56)+10*seg(.64,.9))+mtx*16,rx=k*(-4*seg(.6,.9))-mty*9;
     const ov=Math.abs(Math.sin(rz*Math.PI/180))*w*sc*.55+Math.abs(Math.sin(ry*Math.PI/180))*h*.08+12;
     const tyc=Math.max(ty,vh+ov-(cv.offsetTop+h*.4+h*.6*sc));
     cv.style.transform=`translate3d(${tx.toFixed(2)}px,${tyc.toFixed(2)}px,0) perspective(1600px) rotateY(${ry.toFixed(2)}deg) rotateX(${rx.toFixed(2)}deg) rotate(${rz.toFixed(2)}deg) scale(${sc.toFixed(4)})`}
@@ -4309,7 +4324,7 @@ function frame(now){raf=0;if(!sec.offsetParent)return;
   if(!red.matches){const bt=now-blinkT;if(bt>0){blink=bt<90?bt/90:bt<180?1-(bt-90)/90:0;busy=true;if(bt>=180){blink=0;blinkT=now+2600+Math.random()*3400}}}
   {const op=cl(1-pT*7,0,1);if(openEl&&openEl.style.opacity!==String(op))openEl.style.opacity=op}
   {const ob=orbitEl||(orbitEl=document.getElementById('scOrbit'));if(ob){const cr=cv.getBoundingClientRect(),sr=cv.offsetParent.getBoundingClientRect(),ox=cr.left-sr.left+cr.width*.475,oy=cr.top-sr.top+cr.height*.36,dia=cr.width*(1.02+p*.25)/100;
-    ob.style.transform=`translate3d(${ox.toFixed(1)}px,${oy.toFixed(1)}px,0) rotate(${(p*150+now/1000*4).toFixed(2)}deg) scale(${dia.toFixed(3)})`;
+    ob.style.transform=`translate3d(${(ox-mtx*40).toFixed(1)}px,${(oy-mty*26).toFixed(1)}px,0) rotate(${(p*150+now/1000*4).toFixed(2)}deg) scale(${dia.toFixed(3)})`;
     const parts=ob.children;if(parts[1])parts[1].style.transform=`rotate(${(-now/1000*10).toFixed(1)}deg)`;if(parts[2])parts[2].style.transform=`rotate(${(-p*260-now/1000*9).toFixed(1)}deg) scale(${(1+p*.35).toFixed(3)})`}}
   if(!props)props=[...sec.querySelectorAll('.sp')].map((el,j)=>({el,d:+el.dataset.dp||1,x:0,y:0,ph:j*1.93+.4,sp:.8+((j*37)%9)/18,hop:0}));
   const T=now/1000,amb=vw<=760?.6:1,grin=sec.dataset.mood==='grin';
@@ -4331,7 +4346,8 @@ function go(){if(!raf)raf=requestAnimationFrame(frame)}
 
 /* match the stage colour to the picture's own backdrop so there is no visible edge */
 
-addEventListener('scroll',go,{passive:true});addEventListener('resize',()=>{dirty=true;if(props)props.forEach(q=>{q.cx=undefined});go()});addEventListener('hashchange',()=>setTimeout(go,80));
+addEventListener('scroll',go,{passive:true});new MutationObserver(()=>{dirty=true;go()}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+addEventListener('resize',()=>{dirty=true;if(props)props.forEach(q=>{q.cx=undefined});go()});addEventListener('hashchange',()=>setTimeout(go,80));
 addEventListener('pointermove',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();go()},{passive:true});
 addEventListener('pointerdown',e=>{px=e.clientX;py=e.clientY;lastMove=performance.now();const b=cv.getBoundingClientRect();if(sec.offsetParent&&e.clientX>b.left+b.width*.25&&e.clientX<b.right-b.width*.25&&e.clientY>b.top+b.height*.1&&e.clientY<b.top+b.height*.7&&false)winkT=0;go()},{passive:true});
 document.addEventListener('visibilitychange',go);go()})();
