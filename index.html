@@ -4098,7 +4098,7 @@ beav:`<svg class="dd-beav" viewBox="0 0 92 62" aria-hidden="true"><g class="bv-u
   const prog=(c,x)=>c*L+x;
   const rankOf=()=>{const mine=prog(pCross,s);return 1+cars.filter(c=>prog(c.cross,c.s)>mine).length};
   function lights(n){lit=n;ui.gl&&ui.gl.forEach((m,i)=>m.emissiveIntensity=i<n?3.2:0);[...ui.lb.children].forEach((e,i)=>e.classList.toggle('on',i<n));ui.lb.classList.toggle('show',n>0||state==='wait'||state==='lights')}
-  function startLights(){if(state!=='wait')return;state='lights';let n=0;const step=()=>{if(state!=='lights')return;if(n<5){lights(++n);setTimeout(step,450)}else setTimeout(()=>{if(state!=='lights')return;lights(0);ui.lb.classList.remove('show');state='go';lapT0=raceT0=performance.now();if(ui.gear)ui.gear.textContent='1';ban(fr()?'C’EST PARTI!':'LIGHTS OUT!','var(--comp)')},500+Math.random()*700)};setTimeout(step,250)}
+  function startLights(){if(state!=='wait')return;state='lights';let n=0;const step=()=>{if(state!=='lights')return;if(n<5){lights(++n);beep(620,.16,.14);setTimeout(step,450)}else setTimeout(()=>{if(state!=='lights')return;lights(0);beep(1240,.55,.16);ui.lb.classList.remove('show');state='go';lapT0=raceT0=performance.now();if(ui.gear)ui.gear.textContent='1';ban(fr()?'C’EST PARTI!':'LIGHTS OUT!','var(--comp)')},500+Math.random()*700)};setTimeout(step,250)}
   function ban(t,c){ui.ban.textContent=t;ui.ban.style.color=c||'#F4F4F2';ui.ban.classList.remove('on');void ui.ban.offsetWidth;ui.ban.classList.add('on')}
   function pit(p){const pe=box.querySelector('.cx-pit');if(!pe)return;const im=pe.querySelector('img');if(p.ph!=null){im.src=photos[p.ph].src;im.alt=slots[p.ph].querySelector('img').alt;pe.classList.add('ph')}else{im.removeAttribute('src');pe.classList.remove('ph')}
     pe.querySelector('p').textContent=p.txt[fr()?1:0];pe.classList.remove('on');void pe.offsetWidth;pe.classList.add('on');clearTimeout(pit.t);pit.t=setTimeout(()=>pe.classList.remove('on'),p.ph!=null?3200:4200)}
@@ -4159,28 +4159,34 @@ beav:`<svg class="dd-beav" viewBox="0 0 92 62" aria-hidden="true"><g class="bv-u
   let snd=null,sndOn=true;try{sndOn=localStorage.getItem('dm-snd')!=='0'}catch(_){}
   function noiseBuf(c){const b=c.createBuffer(1,c.sampleRate*2,c.sampleRate),d0=b.getChannelData(0);for(let i=0;i<d0.length;i++)d0[i]=Math.random()*2-1;return b}
   function sndInit(){if(snd||!sndOn)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;let c;try{c=new AC()}catch(_){return}
-    const G=v0=>{const n=c.createGain();n.gain.value=v0;return n},master=G(0),comp=c.createDynamicsCompressor();master.connect(comp);comp.connect(c.destination);
-    const shaper=c.createWaveShaper(),cur=new Float32Array(1024);for(let i=0;i<1024;i++){const x=i/511.5-1;cur[i]=Math.tanh(x*2.2)}shaper.curve=cur;
-    const lp=c.createBiquadFilter();lp.type='lowpass';lp.Q.value=4;const eng=G(.5);shaper.connect(lp);lp.connect(eng);eng.connect(master);
-    const osc=(type,mul,gn)=>{const o=c.createOscillator();o.type=type;const g0=G(gn);o.connect(g0);g0.connect(shaper);o.start();return {o,mul}};
-    const oscs=[osc('sawtooth',1,.42),osc('square',.5,.3),osc('sawtooth',2.005,.16),osc('triangle',3.01,.1)];
-    const lfo=c.createOscillator(),lfoG=G(6);lfo.frequency.value=31;lfo.connect(lfoG);oscs.forEach(x=>lfoG.connect(x.o.frequency));lfo.start();
+    const G=v0=>{const n=c.createGain();n.gain.value=v0;return n},master=G(0),comp=c.createDynamicsCompressor();comp.threshold.value=-20;comp.ratio.value=4;master.connect(comp);comp.connect(c.destination);
+    // engine: soft, rounded tones (sine and triangle) through two gentle low-pass filters, so it hums rather than buzzes
+    const lp=c.createBiquadFilter();lp.type='lowpass';lp.Q.value=.7;const lp2=c.createBiquadFilter();lp2.type='lowpass';lp2.Q.value=.5;lp2.frequency.value=1800;const eng=G(.4);
+    const bus=G(1);bus.connect(lp);lp.connect(lp2);lp2.connect(eng);eng.connect(master);
+    const osc=(type,mul,gn)=>{const o=c.createOscillator();o.type=type;const g0=G(gn);o.connect(g0);g0.connect(bus);o.start();return {o,mul}};
+    const oscs=[osc('sine',.5,.5),osc('triangle',1,.42),osc('sine',2,.16),osc('triangle',1.5,.1)];
+    // a slow wobble so it sounds like an engine and not a test tone
+    const lfo=c.createOscillator(),lfoG=G(2.5);lfo.frequency.value=23;lfo.connect(lfoG);oscs.forEach(x=>lfoG.connect(x.o.frequency));lfo.start();
     const nz=t=>{const n=c.createBufferSource();n.buffer=noiseBuf(c);n.loop=true;const f=c.createBiquadFilter();f.type=t;n.connect(f);n.start();return f};
-    const sq=nz('bandpass');sq.Q.value=7;const sqG=G(0);sq.connect(sqG);sqG.connect(master);
-    const wind=nz('lowpass');wind.frequency.value=520;const wG=G(0);wind.connect(wG);wG.connect(master);
-    const ai=c.createOscillator();ai.type='sawtooth';const aiF=c.createBiquadFilter();aiF.type='lowpass';aiF.frequency.value=1500;const aiG=G(0);ai.connect(aiF);aiF.connect(aiG);aiG.connect(master);ai.start();
-    snd={c,master,eng,lp,oscs,sqG,sq,wG,ai,aiG,blip:0};master.gain.setTargetAtTime(.32,c.currentTime,.4)}
+    const sq=nz('bandpass');sq.Q.value=2.5;const sqG=G(0);sq.connect(sqG);sqG.connect(master);
+    const wind=nz('lowpass');wind.frequency.value=380;const wG=G(0);wind.connect(wG);wG.connect(master);
+    const ai=c.createOscillator();ai.type='triangle';const aiF=c.createBiquadFilter();aiF.type='lowpass';aiF.frequency.value=700;const aiG=G(0);ai.connect(aiF);aiF.connect(aiG);aiG.connect(master);ai.start();
+    snd={c,master,eng,lp,oscs,sqG,sq,wG,ai,aiG,blip:0};master.gain.setTargetAtTime(VOL,c.currentTime,.4)}
+  const VOL=.2;
+  // start lights: a short beep as each light comes on, a higher, longer one when they go out
+  function beep(f,dur,vol){if(!snd||!sndOn||snd.c.state!=='running')return;const c=snd.c,t=c.currentTime,o=c.createOscillator(),g=c.createGain();o.type='sine';o.frequency.value=f;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+.012);g.gain.setValueAtTime(vol,t+dur-.05);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(g);g.connect(c.destination);o.start(t);o.stop(t+dur+.02)}
   function sndWake(){if(!sndOn)return;sndInit();if(snd&&snd.c.state==='suspended')snd.c.resume().catch(()=>{})}
   function sndSleep(){if(snd&&snd.c.state==='running')snd.c.suspend().catch(()=>{})}
   function sndTick(dt){if(!snd)return;const c=snd.c,t=c.currentTime,live=state==='go'||state==='done'||state==='lights'||state==='wait';
-    if(!live||!vis){snd.master.gain.setTargetAtTime(0,t,.25);return}snd.master.gain.setTargetAtTime(.32,t,.2);
+    if(!live||!vis){snd.master.gain.setTargetAtTime(0,t,.25);return}snd.master.gain.setTargetAtTime(VOL,t,.2);
     snd.blip=Math.max(0,snd.blip-dt);const idle=state!=='go'&&state!=='done';const r=idle?(keys.up?7200+Math.random()*900:4300):rpm+(snd.blip>0?1800:0)-(shiftT>0?1400:0);
-    const f0=r/20;snd.oscs.forEach(x=>x.o.frequency.setTargetAtTime(f0*x.mul,t,.025));
-    const th=idle?(keys.up?1:0):thrNow&&!shiftT?1:0;snd.lp.frequency.setTargetAtTime(500+th*2300+r*.12,t,.04);snd.eng.gain.setTargetAtTime(.22+th*.3,t,.05);
-    snd.sq.frequency.setTargetAtTime(1500+v*9,t,.05);snd.sqG.gain.setTargetAtTime(squeal*.16,t,.04);
-    snd.wG.gain.setTargetAtTime(Math.min(1,v/MAXV)*.09+offNow*Math.min(1,v/25)*.16,t,.1);
+    const f0=r/40;snd.oscs.forEach(x=>x.o.frequency.setTargetAtTime(f0*x.mul,t,.04));
+    const th=idle?(keys.up?1:0):thrNow&&!shiftT?1:0;snd.lp.frequency.setTargetAtTime(260+th*520+r*.05,t,.06);snd.eng.gain.setTargetAtTime(.28+th*.22,t,.08);
+    snd.sq.frequency.setTargetAtTime(900+v*4,t,.05);snd.sqG.gain.setTargetAtTime(squeal*.05,t,.06);
+    snd.wG.gain.setTargetAtTime(Math.min(1,v/MAXV)*.07+offNow*Math.min(1,v/25)*.12,t,.1);
     let nd=1e9,nv=0;for(const cc of cars){const ds=Math.abs(((cc.s-s+L*1.5)%L)-L/2),dd=Math.hypot(ds,cc.d-d);if(dd<nd){nd=dd;nv=cc.v}}
-    snd.ai.frequency.setTargetAtTime((4300+Math.min(1,nv/MAXV)*7800)/20*1.01,t,.05);snd.aiG.gain.setTargetAtTime(live&&nd<60?.1/(1+nd/7):0,t,.08)}
+    snd.ai.frequency.setTargetAtTime((4300+Math.min(1,nv/MAXV)*7800)/40*1.01,t,.05);snd.aiG.gain.setTargetAtTime(live&&nd<60?.07/(1+nd/7):0,t,.08)}
   function setSnd(on){sndOn=on;try{localStorage.setItem('dm-snd',on?'1':'0')}catch(_){}if(on)sndWake();else if(snd){snd.master.gain.setTargetAtTime(0,snd.c.currentTime,.05);setTimeout(()=>{if(!sndOn)sndSleep()},200)}if(ui.snd){ui.snd.textContent=on?'🔊':'🔇';ui.snd.setAttribute('aria-label',on?(fr()?'Couper le son':'Mute engine sound'):(fr()?'Activer le son':'Turn engine sound on'))}}
   let GearUI=null;
   // ---------- drawing ----------
